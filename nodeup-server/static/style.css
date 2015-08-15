@@ -1,0 +1,43 @@
+body {
+  margin: auto;
+  max-width: 800px;
+}
+
+.content {
+}
+
+#footer {
+
+}
+
+#clientInput {
+    font-size: inherit;
+    font-weight: inherit;
+    height: 100%;
+}
+
+#summary {
+    font-size: 25px;
+    font-weight: 700;
+}
+
+#paymentWrapper {
+    width: 200px;
+}
+
+#paymentSpinner {
+    background: url('/static/loading.svg');
+}
+
+.paymentImg {
+    position: relative;
+    top: 0px;
+    left: 0px;
+    width: 200px;
+    height: 200px;
+    color: #ddd;
+}
+
+#advanced {
+    max-width: 800px;
+}
