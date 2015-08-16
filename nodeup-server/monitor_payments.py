@@ -25,6 +25,7 @@ while True:
     for txid in unprocessed_txs.members():
         tx = Tx.tx_from_hex(txs[txid])
         tx_blockchain = get_tx(txid)
+        logging.info('Checking %s' % txid)
         if tx_blockchain.block_height == -1:
             continue
         if top_height - tx_blockchain.block_height >= REQUIRED_CONFIRMATIONS:
