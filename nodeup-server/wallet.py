@@ -11,7 +11,7 @@ def hash_to_hex(h):
 def process_tx_initial(tx_obj: Tx):
     found_relevant_address = False
     for out in tx_obj.txs_out:
-        address = out.address()
+        address = out.bitcoin_address()
         if address in all_addresses:
             found_relevant_address = True
             break
@@ -24,8 +24,8 @@ def process_tx_initial(tx_obj: Tx):
     known_txs.add(txid)
     txs[txid] = tx_obj.as_hex()
     for out in tx_obj.txs_out:
-        address = out.address()
-        if address in all_addresses:
+        address = out.bitcoin_address()
+        if address in all_addresses and address is not None:
             unprocessed_txs.add(txid)
             uid = addr_to_uid[address]
             account = Account(uid)
