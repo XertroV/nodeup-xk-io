@@ -53,7 +53,7 @@
     <div ng-show="agent.msgs.length > 0">
         Be sure to bookmark this URL if you would like to return to this page (or enter your email address below).
         <h3>Messages</h3>
-        <pre ng-repeat="m in agent.msgs track by $index">{{ m }}</pre>
+        <p ng-repeat="m in agent.msgs track by $index">{{ m }}</p>
     </div>
 
     <div id="error" class="" ng-show="agent.showError">

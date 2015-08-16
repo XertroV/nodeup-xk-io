@@ -181,9 +181,10 @@
 
         agent.nMsgs = 10;
         agent.updateMsgs = function(){
-            $http.post('/api', {'method': 'getMsgs', 'uid': agent.uid, 'n': agent.nMsgs})
+            $http.post('/api', {'method': 'getMsgs', params: {'uid': agent.uid, 'n': agent.nMsgs}})
                 .success(function(data){
                     agent.msgs = data['msgs'];
+                    $log.log(agent.msgs);
                 }).error($log.log);
             var timeout = 999999999999;
             if (agent.msgs.length == 0){
@@ -193,6 +194,7 @@
             }
             setTimeout(agent.updateMsgs, timeout);
         }
+        agent.updateMsgs();
     }]);
 
 

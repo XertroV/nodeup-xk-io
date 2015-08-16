@@ -22,6 +22,9 @@ class SimpleKVPair:
         self.db[self.key] = value
 
     def get(self):
+        if self.type is bool:
+            if self.db[self.key] == b"False":
+                return False
         try:
             r = self.type(self.db[self.key].decode())
         except KeyError:
@@ -52,15 +55,22 @@ unprocessed_txs = Set(db, 'unprocessed_txs')
 last_block_checked = SimpleKVPair(db, 'last_block_checked', str, default=0)
 nodes_recently_updated = List(db, 'nodes_recently_updated')
 ssh_management_key = SimpleKVPair(db, 'ssh_management_key', str)
-digitalocean_api_key = SimpleKVPair(db, 'do_api_key', str)
+ssh_auditor_key = SimpleKVPair(db, 'ssh_auditor_key', str)
 known_blocks = Set(db, 'known_blocks')
 all_addresses = Set(db, 'all_addresses')
 n_addresses = SimpleKVPair(db, 'n_addresses', int)
 xpub = SimpleKVPair(db, 'xpub', str)
 
 
+# droplet management
+digitalocean_api_key = SimpleKVPair(db, 'do_api_key', str)
+droplets_to_configure = ZSet(db, 'droplets_to_configure')
+droplets_active = Set(db, 'droplets_active')
+droplet_to_uid = Hash(db, 'droplet_to_uid')
+
+
 class Account:
-    def __init__(self, db, uid):
+    def __init__(self, uid):
         self.db = db
         self.uid = uid
         # these need to be first for create_new_address()

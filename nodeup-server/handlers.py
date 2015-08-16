@@ -11,12 +11,12 @@ with open('static/index.html') as f:
     index_file = f.read()
 
 def process_uid(uid):
-    return hashlib.sha256(uid.encode()).digest()
+    return hexlify(hashlib.sha256(uid.encode()).digest())
 
 def handle(method, **params):
     response = {}
     uid = process_uid(params['uid'])  # not user chosen any longer
-    account = Account(db, uid)
+    account = Account(uid)
     fieldMap = {
         'emailNotify': account.email_notify,
         'email': account.email,
