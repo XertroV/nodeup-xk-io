@@ -54,7 +54,7 @@ def configure_droplet(id, ts):
             droplet_ips[id] = droplet['networks']['v4'][0]['ip_address']
             ip = droplet['networks']['v4'][0]['ip_address']
             # test if sshable
-            proc = subprocess.Popen(['ssh', 'root@%s' % ip, ''],
+            proc = subprocess.Popen(['ssh', 'root@%s' % ip, 'wget https://raw.githubusercontent.com/XertroV/nodeup-xk-io/master/nodeInstall.sh && screen -mdS bi bash nodeInstaller.sh "%s" "%s"' % (account.name.get(), account.client.get())],
                                     stdin=subprocess.PIPE)
             proc.communicate(file_contents)
             if proc.retcode != 0:

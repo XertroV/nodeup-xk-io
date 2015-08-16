@@ -1,4 +1,8 @@
 #!/bin/bash
+
+FIRSTNAME=$1
+NODE_NAME=$2
+
 echo "########### The server will reboot when the script is complete"
 echo "########### Changing to home dir"
 cd ~
