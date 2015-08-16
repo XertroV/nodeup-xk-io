@@ -3,11 +3,12 @@
 import time
 import random
 import datetime
+import logging
 
 import requests
 
 from models import last_block_checked, unprocessed_txs, Account, addr_to_uid, nodes_recently_updated, ssh_management_key, digitalocean_api_key
-from constants import REQUIRED_CONFIRMATIONS, COIN
+from constants import REQUIRED_CONFIRMATIONS, COIN, MIN_TIME
 from digitalocean import calc_node_minutes, regions, droplet_creation_json, create_headers
 
 
@@ -20,6 +21,9 @@ while True:
     next_uid = nodes_recently_updated.popleft()
     account = Account(next_uid)
     if not account.node_created.get():
+        if account.total_minutes < MIN_TIME:
+            account.add_msg('Node creation failed! A minimum of %d minutes need to be purchased at a time. You need %d more minutes.' % (MIN_TIME, MIN_TIME - account.total_minutes))
+            continue
         creation_request = droplet_creation_json(account.uid, ssh_fingerprints=[ssh_management_key.get()])
         headers = create_headers(digitalocean_api_key.get())
         res = requests.post("https://api.digitalocean.com/v2/droplets", json=creation_request, headers=headers)
@@ -31,6 +35,7 @@ while True:
             account.node_created.set(True)
             account.add_msg('Node created successfully! Node ID %s' % (account.droplet_id.get(),))
         else:
-            print('Node creation failed! Status %d' % res.status_code)
-            import pdb; pdb.set_trace()
+            logging.error('Node creation failed! Status %d' % res.status_code)
+            logging.error(res)
+            # import pdb; pdb.set_trace()
 
