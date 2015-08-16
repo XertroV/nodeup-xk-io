@@ -9,15 +9,24 @@ def hash_to_hex(h):
     return hexlify(h[::-1])
 
 def process_tx_initial(tx_obj: Tx):
+    found_relevant_address = False
+    for out in tx_obj.txs_out:
+        address = out.address()
+        if address in all_addresses:
+            found_relevant_address = True
+            break
+    if not found_relevant_address:
+        return
+
     txid = tx_obj.hash()
     if txid in known_txs:
         return
     known_txs.add(txid)
-    unprocessed_txs.add(txid)
     txs[txid] = tx_obj.as_hex()
     for out in tx_obj.txs_out:
         address = out.address()
         if address in all_addresses:
+            unprocessed_txs.add(txid)
             uid = addr_to_uid[address]
             account = Account(uid)
             account.txs.add(txid)

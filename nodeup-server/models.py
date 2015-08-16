@@ -3,6 +3,8 @@ import hashlib
 from decimal import Decimal
 import datetime
 
+from pycoin.key.BIP32Node import BIP32Node
+
 from walrus.database import Hash, List, Set, ZSet, Database
 
 from bitcoinrpc import connect_to_local
@@ -66,7 +68,7 @@ class Account:
         self.total_minutes = SimpleKVPair(self.db, 'uid_total_minutes:%s' % uid, Decimal)
         if uid not in uid_to_addr:
             self.create_new_address()
-        self.address = uid_to_addr[uid]
+        self.address = uid_to_addr[uid].decode()
         self.txs = Set(db, 'txs_for:%s' % uid)
         self.msgs = List(db, 'msgs:%s' % uid)
         self.client = SimpleKVPair(self.db, 'client:%s' % uid, str, default='Bitcoin XT')
@@ -79,15 +81,16 @@ class Account:
         self.droplet_id = SimpleKVPair(db, 'droplet_id:%s' % uid, int)
 
     def create_new_address(self):
-        if len(unused_addresses) == 0:
-            unused_addresses.append('Error, please create new account')  # not great
-        new_address = unused_addresses.popleft()
+        n = n_addresses.incr()
+        bip32node = BIP32Node.from_hwif(xpub.get())
+        subkey = bip32node.subkey(0).subkey(n)  # match electrum path
+        new_address = subkey.address()
         addr_to_uid[new_address] = self.uid
         uid_to_addr[self.uid] = new_address
         all_addresses.add(new_address)
         self.total_coins.set(0)
         self.total_minutes.set(0)
-        return new_address
+        return True
 
     def get_msgs(self, n=10):
         return self.msgs[:n]
