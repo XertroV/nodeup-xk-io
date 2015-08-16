@@ -21,7 +21,7 @@ while True:
     next_uid = nodes_recently_updated.popleft()
     account = Account(next_uid)
     if not account.node_created.get():
-        if account.total_minutes < MIN_TIME:
+        if account.unconf_minutes.get() < MIN_TIME:
             account.add_msg('Node creation failed! A minimum of %d minutes need to be purchased at a time. You need %d more minutes.' % (MIN_TIME, MIN_TIME - account.total_minutes))
             continue
         creation_request = droplet_creation_json(account.uid, ssh_fingerprints=[ssh_management_key.get()])

@@ -95,7 +95,7 @@
         agent.loadStats();
 
         agent._paymentQR = new QRCode(document.getElementById("paymentQR"), {
-            text: "http://jindo.dev.naver.com/collie",
+            text: "generating qr code...",
             width: 200,
             height: 200,
             colorDark : "#000000",
@@ -113,6 +113,9 @@
 
         agent.getPaymentDetails = function(){
             agent.hidePayment();
+            agent.getPaymentDetailsSilent();
+        }
+        agent.getPaymentDetailsSilent = function(){
             $http.post('/api', {'method': 'getPaymentDetails', params: {
                 'uid': agent.uid,
                 'client': agent.client,
@@ -125,6 +128,7 @@
                         $log.log(data);
                         if (agent.initial) { agent.initial = false; }
                         agent.showPayment(data['uri']);
+                        agent.status = data['status'];
                     }
                 })
                 .error(function(error, a,b,c){
@@ -173,6 +177,21 @@
         agent.randomUpdate = function(){
             agent.alertModified();  // don't call the update directly so we don't interfere too much
             setTimeout(agent.randomUpdate, 60 * 1000); // update every 1 minute regardless
+        }
+
+        agent.nMsgs = 10;
+        agent.updateMsgs = function(){
+            $http.post('/api', {'method': 'getMsgs', 'uid': agent.uid, 'n': agent.nMsgs})
+                .success(function(data){
+                    agent.msgs = data['msgs'];
+                }).error($log.log);
+            var timeout = 999999999999;
+            if (agent.msgs.length == 0){
+                timeout = 2000;
+            } else {
+                timeout = 60000;
+            }
+            setTimeout(agent.updateMsgs, timeout);
         }
     }]);
 

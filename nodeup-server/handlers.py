@@ -33,6 +33,7 @@ def handle(method, **params):
 
         amount = actually_charge(months, tip, exchange_rate.get())
         response['uri'] = "bitcoin:%s?amount=%.8f&label=nodeup.xk.io sponsored node service." % (account.address, amount)
+        response['status'] = 'Payment received.' if account.unconf_minutes.get() > 0 else 'Waiting for payment...'
 
     elif method == '':
         pass
