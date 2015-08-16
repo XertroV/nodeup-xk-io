@@ -16,10 +16,20 @@ echo "########### Creating Swap"
 dd if=/dev/zero of=/swapfile bs=1M count=2048 ; mkswap /swapfile ; swapon /swapfile
 echo "/swapfile swap swap defaults 0 0" >> /etc/fstab
 
-echo "########### Cloning XT and Compiling"
+echo "########### Cloning Bitcoin and Compiling"
 mkdir -p ~/src && cd ~/src
-git clone https://github.com/bitcoinxt/bitcoinxt.git
-cd bitcoinxt
+
+if [ "$NODE_NAME" == "Bitcoin XT" ]; then
+    git clone https://github.com/bitcoinxt/bitcoinxt.git
+    cd bitcoinxt
+elif [ "$NODE_NAME" == "Bitcoin Core" ]; then
+    git clone https://github.com/bitcoin/bitcoin.git
+    cd bitcoin
+else
+    git clone https://github.com/bitcoinxt/bitcoinxt.git
+    cd bitcoinxt
+fi
+
 
 # Add a market to track how much BitcoinAutoNode is used
 # Insert [B.A.N.] at the end of the client name, probably not compatible with BIP 14 but eh
@@ -29,7 +39,7 @@ if [ -z $FIRSTNAME ]; then
 else
   EXTRA=" $FIRSTNAME's node"  # keep first space
 fi
-sed -i "s/return ss.str();/return ss.str() + \"[B.A.N.]$EXTRA\";/" src/clientversion.cpp
+sed -i "s/return ss.str();/return ss.str() + \"[NodeUp.xk.io]$EXTRA\";/" src/clientversion.cpp
 
 ./autogen.sh
 ./configure --without-gui --without-upnp --disable-tests
