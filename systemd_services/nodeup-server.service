@@ -1,7 +1,7 @@
 [Unit]
 Description=NodeUp server service
-After=network.target bitcoind.target
-Requires=bitcoind.target
+After=network.target bitcoind.service
+Requires=bitcoind.service
 
 [Service]
 Type=simple
