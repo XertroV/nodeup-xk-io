@@ -1,0 +1,14 @@
+[Unit]
+Description=NodeUp server service
+After=network.target bitcoind.target
+Requires=bitcoind.target
+
+[Service]
+Type=simple
+ExecStart=/home/user/prod/nodeup-xk-io/nodeup-server/run_server.py
+Restart=always
+RestartSec=1s
+User=user
+
+[Install]
+WantedBy=multi-user.target

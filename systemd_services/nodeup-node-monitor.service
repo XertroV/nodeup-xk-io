@@ -1,11 +1,11 @@
 [Unit]
-Description=NodeUp exchange rate monitor service
+Description=NodeUp node monitor service
 After=network.target bitcoind.service redis_6379.service
 Requires=bitcoind.service nodeup-server.service redis_6379.service
 
 [Service]
 Type=simple
-ExecStart=/home/user/prod/nodeup-xk-io/nodeup-server/monitor_exchange_rate.py
+ExecStart=/home/user/prod/nodeup-xk-io/nodeup-server/monitor_nodes.py
 Restart=always
 RestartSec=1s
 User=user
