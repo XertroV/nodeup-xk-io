@@ -21,10 +21,8 @@ if blockhash in known_blocks:
     sys.exit()
 
 bitcoind = connect_to_local()
-block_hex = bitcoind.getblock(blockhash, True)
+block_hex = bitcoind.getblock(blockhash, False)
 block = Block.parse(io.BytesIO(unhexlify(block_hex)))
 for tx in block.txs:
-    for out in tx.txs_out:
-        if out.address() in all_addresses:
-            process_tx_initial(tx)
+    process_tx_initial(tx)
 
