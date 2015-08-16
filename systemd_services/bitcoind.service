@@ -1,0 +1,14 @@
+[Unit]
+Description=Bitcoind service for a node.
+After=network.target
+
+[Service]
+Type=forking
+ExecStart=/usr/local/bin/bitcoind -datadir=/home/bitcoin/.bitcoin/
+ExecStop=/usr/local/bin/bitcoin-cli -datadir=/home/bitcoin/.bitcoin/ stop
+PIDFile=/home/bitcoin/.bitcoin/bitcoind.pid
+Restart=always
+User=bitcoin
+
+[Install]
+WantedBy=multi-user.target

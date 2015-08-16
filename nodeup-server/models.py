@@ -5,6 +5,8 @@ import datetime
 
 from walrus.database import Hash, List, Set, ZSet, Database
 
+from bitcoinrpc import connect_to_local
+
 db = Database()
 
 class SimpleKVPair:
@@ -74,7 +76,7 @@ class Account:
 
     def create_new_address(self):
         if len(unused_addresses) == 0:
-            unused_addresses.append('1testaddress')
+            unused_addresses.append(bitcoind.getnewaddress())  # not great
         new_address = unused_addresses.popleft()
         addr_to_uid[new_address] = self.uid
         uid_to_addr[self.uid] = new_address
