@@ -29,6 +29,7 @@ while True:
             account.creation_ts.set(created_at.timestamp())
             account.droplet_id.set(response['droplet']['id'])
             account.node_created.set(True)
+            account.add_msg('Node created successfully! Node ID %s' % (account.droplet_id.get(),))
         else:
             print('Node creation failed! Status %d' % res.status_code)
             import pdb; pdb.set_trace()

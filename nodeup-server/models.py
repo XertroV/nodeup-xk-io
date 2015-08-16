@@ -51,6 +51,10 @@ last_block_checked = SimpleKVPair(db, 'last_block_checked', str, default=0)
 nodes_recently_updated = List(db, 'nodes_recently_updated')
 ssh_management_key = SimpleKVPair(db, 'ssh_management_key', str)
 digitalocean_api_key = SimpleKVPair(db, 'do_api_key', str)
+known_blocks = Set(db, 'known_blocks')
+all_addresses = Set(db, 'all_addresses')
+n_addresses = SimpleKVPair(db, 'n_addresses', int)
+xpub = SimpleKVPair(db, 'xpub', str)
 
 
 class Account:
@@ -76,10 +80,11 @@ class Account:
 
     def create_new_address(self):
         if len(unused_addresses) == 0:
-            unused_addresses.append(bitcoind.getnewaddress())  # not great
+            unused_addresses.append('Error, please create new account')  # not great
         new_address = unused_addresses.popleft()
         addr_to_uid[new_address] = self.uid
         uid_to_addr[self.uid] = new_address
+        all_addresses.add(new_address)
         self.total_coins.set(0)
         self.total_minutes.set(0)
         return new_address

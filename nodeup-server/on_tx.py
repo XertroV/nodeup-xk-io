@@ -1,30 +1,20 @@
 #!/usr/bin/env python3
 
 import argparse
-import json
 import sys
+from pycoin.tx import Tx
 
-from bitcoinrpc import connect_to_local
-
-from models import txs, known_txs, unprocessed_txs, addr_to_uid, Account
+from models import txs, known_txs, unprocessed_txs, addr_to_uid, Account, known_blocks, all_addresses
+from wallet import process_tx_initial
 
 parser = argparse.ArgumentParser()
+parser.add_argument('--tx-hex')
 parser.add_argument('--txid')
 args = parser.parse_args()
 
-txid = args.txid
-known_tx = True if known_txs.add(txid) == 0 else False
-if known_tx:
+if args.txid in known_txs:
     sys.exit()
 
-bitcoind = connect_to_local()
-tx_json = bitcoind.gettransaction(txid)
-if tx_json['amount'] <= 0:  # (so it was a send or move)
-    sys.exit()
+tx = Tx.tx_from_hex(args.tx_hex)
+process_tx_initial(tx)
 
-unprocessed_txs.add(txid)
-txs[txid] = json.dumps(tx_json)
-for detail in tx_json['details']:
-    if detail['category'] == 'receive':
-        uid = addr_to_uid[detail['address']]
-        Account(uid).txs.add(txid)
