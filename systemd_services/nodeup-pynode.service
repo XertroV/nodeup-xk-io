@@ -5,7 +5,7 @@ Requires=bitcoind.service nodeup-server.service
 
 [Service]
 Type=simple
-ExecStart=/home/user/prod/nodeup-xk-io/nodeup-pynode/client.py
+ExecStart=/home/user/prod/nodeup-xk-io/nodeup-server/client.py
 Restart=always
 RestartSec=1s
 User=user
