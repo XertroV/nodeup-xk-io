@@ -5,8 +5,6 @@ import time
 from bitcoinrpc import connect_to_local
 
 from models import unused_addresses
-from constants import REQUIRED_CONFIRMATIONS, COIN
-from digitalocean import calc_node_minutes
 
 bitcoind = connect_to_local()
 
