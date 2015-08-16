@@ -1,16 +1,25 @@
 (function(){
     var app = angular.module('nodeup', []);
 
-    app.controller('UserAgentController', ['$http', '$log', '$location', function($http, $log, $location){
+    app.controller('UserAgentController', ['$http', '$log', '$location', '$window', function($http, $log, $location, $window){
         var agent = this;
+
+        agent.newIdentity = function(){
+            $window.location.href = '/?' + Math.random();  // note, the '?' is important here if we want to get entropy from urandom
+        }
+
         agent.uid = $location.path().substr(1);  // remove '/' at beginning of path
         agent.msgs = [];
         agent.email = '';
         agent.emailNotify = false;
         agent.initial = true;
+        agent.totalMinutesPaid = 0;
+        agent.totalCoinsPaid = 0;
 
         agent.tip = 10;
         agent.exchangeRate = 100000000000;
+        agent.nodeMinutes = 0;
+
 
         agent.firstName = '';
 
@@ -71,6 +80,19 @@
         agent.loadField('name');
         agent.loadField('tip');
         agent.loadField('client');
+
+        agent.loadStats = function(){
+            $http.post('/api', {method: 'getStats', params: {'uid': agent.uid}})
+                .success(function(data){
+                    agent.exchangeRate = data['exchangeRate'];
+                    agent.nodeMinutes = data['nodeMinutes'];
+                    agent.totalMinutesPaid = data['totalMinutesPaid'];
+                    agent.totalCoinsPaid = data['totalCoinsPaid'];
+                    $log.log(data);
+                }).error($log.log);
+            setTimeout(agent.loadStats, 60 * 1000); // update once a min
+        }
+        agent.loadStats();
 
         agent._paymentQR = new QRCode(document.getElementById("paymentQR"), {
             text: "http://jindo.dev.naver.com/collie",

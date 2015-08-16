@@ -10,7 +10,7 @@ def calculate_cost_in_dollars(months):
     return months * DOLLARS_PER_MONTH
 
 def actually_charge(months, tip, exchange_rate=1.0):
-    return calculate_cost_in_dollars(months) * (1 + tip) / max(exchange_rate, 100000000)
+    return calculate_cost_in_dollars(months) * (1 + tip) / exchange_rate
 
 def calc_node_minutes(satoshi_amount=None, dollar_amount=None, exchange_rate=1.0):
     if (satoshi_amount is None and dollar_amount is None) or (satoshi_amount is not None and dollar_amount is not None):

@@ -41,3 +41,7 @@ body {
 #advanced {
     max-width: 800px;
 }
+
+.btn-small {
+    line-height: 0.25rem;
+}

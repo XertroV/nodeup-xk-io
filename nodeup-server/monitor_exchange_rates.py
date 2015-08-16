@@ -12,4 +12,5 @@ while True:
     if 'code' in response:
         if response['code'] == "USD":
             exchange_rate.set(response['rate'])
+            print('Set rate to', response['rate'], 'and retrieved', exchange_rate.get())
     time.sleep(30)

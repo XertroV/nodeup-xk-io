@@ -58,7 +58,7 @@ def handle(method, **params):
 
     elif method == 'getStats':
         response['nodeMinutes'] = int(total_nodeminutes.get())
-        response['totalMonthsPaid'] = account.total_minutes.get()
+        response['totalMinutesPaid'] = account.total_minutes.get()
         response['totalCoinsPaid'] = account.total_coins.get()
         response['exchangeRate'] = exchange_rate.get()
 

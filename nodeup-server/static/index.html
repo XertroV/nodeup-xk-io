@@ -17,7 +17,6 @@
 <div class="content center" id='main' ng-controller="UserAgentController as agent" ng-show="tabs.is('main')">
     <h2>Hello, {{ agent.renderName() }}</h2>
 
-
     <div id="summary" class="center h3">
         <p>
             <form class="clearfix">
@@ -95,6 +94,9 @@
             <p>
                 <button ng-click="agent.recompile()" class="btn btn-outline">Recompile</button>
             </p>
+
+            <p class="h6"><button class="btn btn-outline" ng-click="agent.newIdentity()">(new identity - BOOKMARK THIS ONE FIRST)</button></p>
+
         </form>
     </div>
 </div>
