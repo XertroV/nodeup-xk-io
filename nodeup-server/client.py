@@ -44,7 +44,7 @@ def new_block_event(block):
 def new_transaction_event(tx):
     if tx.is_valid():
         logging.info("\n  Valid TX: %s\n" % (tx.hash.decode(),))
-        process_tx_initial(Tx.tx_from_hex(hexlify(tx.serialize())))
+        process_tx_initial(Tx.tx_from_hex(hexlify(tx.serialize()).decode()))
 
 def verbose_sendmsg(message):
     if debugnet:
