@@ -26,3 +26,5 @@ block = Block.parse(io.BytesIO(unhexlify(block_hex)))
 for tx in block.txs:
     process_tx_initial(tx)
 
+known_blocks.add(blockhash)
+

@@ -4,11 +4,12 @@ After=network.target
 
 [Service]
 Type=forking
-ExecStart=/usr/local/bin/bitcoind -datadir=/home/bitcoin/.bitcoin/
-ExecStop=/usr/local/bin/bitcoin-cli -datadir=/home/bitcoin/.bitcoin/ stop
-PIDFile=/home/bitcoin/.bitcoin/bitcoind.pid
+ExecStart=/usr/local/bin/bitcoind -datadir=/home/user/.bitcoin/
+ExecStop=/usr/local/bin/bitcoin-cli -datadir=/home/user/.bitcoin/ stop
+PIDFile=/home/user/.bitcoin/bitcoind.pid
 Restart=always
-User=bitcoin
+User=user
 
 [Install]
 WantedBy=multi-user.target
+
