@@ -6,9 +6,9 @@ import time
 import hashlib
 import signal
 from binascii import hexlify
+import argparse
 
 from pycoin.tx import Tx
-
 
 from bitcoinlib.coredefs import *
 from bitcoinlib.core import *
@@ -17,14 +17,18 @@ from bitcoinlib.logger import PrettyLog
 
 from wallet import process_tx_initial
 
+parser = argparse.ArgumentParser()
+parser.add_argument('--testnet', action='store_true')
+args = parser.parse_args()
+
 MY_VERSION = 313
 MY_SUBVERSION = b"/bitcoinlib:0.0.1/"
 
 # Default Settings if no configuration file is given
 settings = {
         "host": "127.0.0.1",
-        "port": 8333,
-        "chain": "testnet3",
+        "port": 8333 if not args.testnet else 18333,
+        "chain": "mainnet" if not args.testnet else 'testnet3',
         "log": None,
         "debug": True
 }
@@ -219,7 +223,7 @@ def run():
     loop = asyncio.get_event_loop()
     loop.add_signal_handler(signal.SIGINT, loop.stop)
     c = initialize_client()
-    coro = loop.create_connection(lambda: c, '127.0.0.1', 18333)
+    coro = loop.create_connection(lambda: c, settings['host'], settings['port'])
     loop.run_until_complete(coro)
     loop.run_forever()
     loop.close()
