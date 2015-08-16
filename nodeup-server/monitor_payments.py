@@ -1,3 +1,5 @@
+#!/usr/bin/env python3
+
 import time
 
 from bitcoinrpc import connect_to_local
