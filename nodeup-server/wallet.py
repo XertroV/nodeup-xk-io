@@ -1,4 +1,5 @@
 from binascii import hexlify
+import logging
 
 from pycoin.tx import Tx
 
@@ -16,6 +17,7 @@ def process_tx_initial(tx_obj: Tx):
             found_relevant_address = True
             break
     if not found_relevant_address:
+        logging.info('Found irrelevant tx %s' % hash_to_hex(tx_obj.hash()))
         return
 
     txid = tx_obj.hash()

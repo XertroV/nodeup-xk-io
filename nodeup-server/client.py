@@ -24,7 +24,7 @@ MY_SUBVERSION = b"/bitcoinlib:0.0.1/"
 settings = {
         "host": "127.0.0.1",
         "port": 8333,
-        "chain": "mainnet",
+        "chain": "testnet3",
         "log": None,
         "debug": True
 }
@@ -209,7 +209,7 @@ class BitcoinClient(asyncio.Protocol):
 def initialize_client():
     chain = settings['chain']
     if chain not in NETWORKS:
-        log.warning("invalid network")
+        logging.warning("invalid network")
         sys.exit(1)
     netmagic = NETWORKS[chain]
     return BitcoinClient(settings['host'], settings['port'], logging, netmagic)
@@ -219,7 +219,7 @@ def run():
     loop = asyncio.get_event_loop()
     loop.add_signal_handler(signal.SIGINT, loop.stop)
     c = initialize_client()
-    coro = loop.create_connection(lambda: c, '127.0.0.1', 8333)
+    coro = loop.create_connection(lambda: c, '127.0.0.1', 18333)
     loop.run_until_complete(coro)
     loop.run_forever()
     loop.close()
