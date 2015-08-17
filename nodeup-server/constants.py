@@ -1,3 +1,3 @@
 REQUIRED_CONFIRMATIONS = 2
 COIN = 10 ** 8
-MIN_TIME = 60 * 6  # min 6 hours
+MIN_TIME = 60 * 24 * 14 - 1  # min 14 days
