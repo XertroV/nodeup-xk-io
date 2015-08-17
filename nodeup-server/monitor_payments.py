@@ -25,7 +25,7 @@ if __name__ == '__main__':
         logging.info('Latest block: %s' % best_block_hash)
 
         for tx_hash in unprocessed_txs.members():
-            txid = hash_to_hex(tx_hash)
+            txid = hash_to_hex(tx_hash).decode()
             tx = Tx.tx_from_hex(txs[tx_hash].decode())
             tx_blockchain = get_tx(txid)
             logging.info('Checking %s' % txid)
@@ -34,7 +34,7 @@ if __name__ == '__main__':
             if top_height - tx_blockchain.block_height >= REQUIRED_CONFIRMATIONS:
                 unprocessed_txs.remove(tx_hash)
                 for out in tx.txs_out:
-                    address = out.address()
+                    address = out.bitcoin_address()
                     if address not in all_addresses:
                         continue
                     account = Account(addr_to_uid[address])
@@ -48,3 +48,4 @@ if __name__ == '__main__':
                     nodes_recently_updated.append(account.uid)
 
         last_block_checked.set(best_block_hash)
+        logging.info('Checked: %s' % best_block_hash)
