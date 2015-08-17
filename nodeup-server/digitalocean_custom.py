@@ -23,7 +23,6 @@ def calc_node_minutes(satoshi_amount=None, dollar_amount=None, exchange_rate=1.0
     return int(dollars / DOLLARS_PER_MONTH * MINUTES_PER_MONTH)
 
 
-
 def droplet_creation_json(uid, rand_region=False, ssh_fingerprints=None):
     region = 'nyc3' if not rand_region else random.choice(regions)
     keys = None if ssh_fingerprints is None else ssh_fingerprints
