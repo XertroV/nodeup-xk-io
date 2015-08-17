@@ -51,6 +51,9 @@ sed -i "s/return ss.str();/return ss.str() + \"[NodeUp.xk.io]$EXTRA\";/" src/cli
 make
 make install
 
+cd ..
+rm -r bitcoin  # clean up to enable recompile
+
 echo "########### Create Bitcoin User"
 useradd -m user
 
@@ -100,6 +103,6 @@ WantedBy=multi-user.target
 systemctl enable bitcoind
 
 echo "############ Add an alias for easy use"
-echo "alias btc=\"sudo -u user bitcoin-cli -datadir=/home/bitcoin/.bitcoin\"" >> ~/.bashrc  # example use: btc getinfo
+echo "alias btc=\"sudo -u user bitcoin-cli -datadir=/home/user/.bitcoin\"" >> ~/.bashrc  # example use: btc getinfo
 
 reboot

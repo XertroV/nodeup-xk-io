@@ -94,6 +94,13 @@
         }
         agent.loadStats();
 
+        agent.recompile = function(){
+            $http.post('/api', {method: 'recompile', params:{'uid': agent.uid}})
+                .success(function(data){
+                    agent._updateMsgs();
+                })
+        }
+
         agent._paymentQR = new QRCode(document.getElementById("paymentQR"), {
             text: "generating qr code...",
             width: 200,
@@ -180,7 +187,7 @@
         }
 
         agent.nMsgs = 10;
-        agent.updateMsgs = function(){
+        agent._updateMsgs = function(){
             $http.post('/api', {'method': 'getMsgs', params: {'uid': agent.uid, 'n': agent.nMsgs}})
                 .success(function(data){
                     agent.msgs = data['msgs'];
@@ -189,12 +196,15 @@
                         agent.getPaymentDetailsSilent();
                     }
                 }).error($log.log);
+        }
+        agent.updateMsgs = function(){
             var timeout = 999999999999;
             if (agent.msgs.length == 0){
                 timeout = 2000;
             } else {
-                timeout = 60000;
+                timeout = 15000;
             }
+            agent._updateMsgs();
             setTimeout(agent.updateMsgs, timeout);
         }
         agent.updateMsgs();

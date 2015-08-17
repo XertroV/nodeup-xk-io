@@ -91,8 +91,8 @@ class Account:
         self.name = SimpleKVPair(self.db, 'name:%s' % uid, str, default='')
         self.node_created = SimpleKVPair(self.db, 'node_created:%s' % uid, bool, default=False)
         self.creation_ts = SimpleKVPair(self.db, 'creation_ts:%s' % uid, int)
-        self.droplet_id = SimpleKVPair(db, 'droplet_id:%s' % uid, int)
-        self.unconf_minutes = SimpleKVPair(db, 'unconf_mins:%s' % uid, int)
+        self.droplet_id = SimpleKVPair(db, 'droplet_id:%s' % uid, str)
+        self.unconf_minutes = SimpleKVPair(db, 'unconf_mins:%s' % uid, int, default=0)
 
     def create_new_address(self):
         n = n_addresses.incr()
