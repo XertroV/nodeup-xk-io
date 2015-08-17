@@ -22,7 +22,7 @@ def process_tx_initial(tx_obj: Tx):
         return
 
     tx_hash = tx_obj.hash()
-    txid = hash_to_hex(tx_hash)
+    txid = hash_to_hex(tx_hash).decode()
     if tx_hash in known_txs:
         return
     known_txs.add(tx_hash)

@@ -35,7 +35,7 @@ def process_next_creation():
         if account.unconf_minutes.get() < MIN_TIME:
             account.add_msg('Node creation failed! A minimum of %d minutes need to be purchased at a time. You need %d more minutes.' % (MIN_TIME, MIN_TIME - account.total_minutes))
             return
-        account.add_msg('Creating node now.')
+        account.add_msg('Creating node now. ETA 10 minutes.')
         res = requests.post("https://api.vultr.com/v1/server/create?api_key=%s" % vultr_api_key.get(),
                             data={"DCID": 1, "VPSPLANID": 87, "OSID": 192, "SSHKEYID": ssh_management_key.get()})
         if res.status_code == 200:  # accepted
@@ -67,7 +67,7 @@ def configure_droplet(id, servers=None):
     password = droplet['default_password']
     droplet_ips[id] = ip
     # ssh
-    exec = 'curl https://raw.githubusercontent.com/XertroV/nodeup-xk-io/master/nodeInstall.sh  > nodeInstall.sh; bash nodeInstall.sh "%s" "%s" &> ~/installLog'  # this seems to run okay in the background like this :shrug:
+    exec = 'curl https://raw.githubusercontent.com/XertroV/nodeup-xk-io/master/nodeInstall.sh  > nodeInstall.sh; bash nodeInstall.sh "%s" "%s" &> ~/installLog &'
     try:
         print('root', password, ip)
         _, stdout, stderr = ssh(ip, 'root', password, exec % (account.name.get(), account.client.get()))
@@ -76,7 +76,7 @@ def configure_droplet(id, servers=None):
         logging.error('could not configure droplet %s due to %s' % (id, repr(e)))
         return
     print(stdout.read(), stderr.read())
-    account.add_msg('Started install script on node %s -- takes about 30 minutes' % id)
+    account.add_msg('Started compilation script on node %s -- takes about 30 minutes' % id)
     account.add_msg('Droplet IP: %s' % ip)
     droplets_to_configure.remove(id)
 

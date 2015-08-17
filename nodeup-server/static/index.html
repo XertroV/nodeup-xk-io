@@ -49,9 +49,9 @@
         Be sure to bookmark this URL if you would like to return to this page (or enter your email address below).
         <h3>Messages</h3>
         <hr>
-            <table>
-                <tr ng-repeat="m in agent.msgs track by $index"><td>{{ m }}</td></tr>
-            </table>
+            <ul>
+                <li ng-repeat="m in agent.msgs track by $index">{{ m }}</li>
+            </ul>
         <hr>
     </div>
 
@@ -74,7 +74,7 @@
         <br><br>
         <form class="center">
             <p>
-                If you choose to provide a first name it will be compiled into <code>bitcoind</code> and visible through the version string (e.g. <code>/Bitcoin XT:0.11.0/[B.A.N.] Gavin's Node</code>). For practical reasons this is limited to 140 characters. If the node has already been created you will need to hit the 'recompile' button for this change to work.
+                If you choose to provide a first name it will be compiled into <code>bitcoind</code> and visible through the version string (e.g. <code>/Bitcoin XT:0.11.0/[NodeUp.xk.io] Gavin's Node</code>). For practical reasons this is limited to 140 characters. If the node has already been compiled you will need to hit the 'recompile' button for this change to work.
                 <br><br>
                 <label for="nameInput">First Name: (optional)</label><br>
                 <input type="text" id="nameInput" ng-model="agent.firstName" class="field inline-block" ng-change="agent.alertModified('name')">
@@ -86,6 +86,7 @@
             </p>
 
             <p>
+                <h4>Email Features Currently Unimplemented</h4>
                 If you choose to leave your email here, you will receive an email at important times, such as your when your node comes online, finishes synchronising with the blockchain, or running out of funds.
                 <br>
                 <label for="emailInput">Email (optional):</label>
@@ -98,6 +99,7 @@
             </p>
 
             <p>
+                Unimplemented:
                 <button ng-click="agent.recompile()" class="btn btn-outline">Recompile</button>
             </p>
 
