@@ -15,6 +15,7 @@
 <body ng-controller="TabController as tabs" class="center">
 
 <div class="content center" id='main' ng-controller="UserAgentController as agent" ng-show="tabs.is('main')">
+    <h1 class="red">WARNING: SUPER ALPHA - YOU COULD LOSE MONEY IF YOU SEND IT HERE</h1>
     <h2>Hello, {{ agent.renderName() }}</h2>
 
     <div id="summary" class="center h3">
@@ -47,7 +48,7 @@
     <h3 ng-show="agent.msgs.length == 0">Pay to create your node!</h3>
     <div ng-show="agent.msgs.length > 0">
         Be sure to bookmark this URL if you would like to return to this page (or enter your email address below).
-        <h3>Messages</h3>
+        <h3>Messages <button class="btn btn-outline h6" ng-click="agent.nMsgs = 999999; agent._updateMsgs()">Show All</button></h3>
         <hr>
             <ul>
                 <li ng-repeat="m in agent.msgs track by $index">{{ m }}</li>
