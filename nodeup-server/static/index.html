@@ -48,7 +48,11 @@
     <div ng-show="agent.msgs.length > 0">
         Be sure to bookmark this URL if you would like to return to this page (or enter your email address below).
         <h3>Messages</h3>
-        <p ng-repeat="m in agent.msgs track by $index">{{ m }}</p>
+        <hr>
+            <table>
+                <tr ng-repeat="m in agent.msgs track by $index"><td>{{ m }}</td></tr>
+            </table>
+        <hr>
     </div>
 
     <p>
