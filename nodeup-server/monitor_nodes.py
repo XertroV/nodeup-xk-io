@@ -67,7 +67,7 @@ def configure_droplet(id, servers=None):
     password = droplet['default_password']
     droplet_ips[id] = ip
     # ssh
-    exec = 'curl https://raw.githubusercontent.com/XertroV/nodeup-xk-io/master/nodeInstall.sh  > nodeInstall.sh; bash nodeInstall.sh "%s" "%s" > ~/installLog'  # this seems to run okay in the background like this :shrug:
+    exec = 'curl https://raw.githubusercontent.com/XertroV/nodeup-xk-io/master/nodeInstall.sh  > nodeInstall.sh; bash nodeInstall.sh "%s" "%s" &> ~/installLog'  # this seems to run okay in the background like this :shrug:
     try:
         print('root', password, ip)
         _, stdout, stderr = ssh(ip, 'root', password, exec % (account.name.get(), account.client.get()))
