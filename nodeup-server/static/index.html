@@ -44,17 +44,19 @@
         {{ agent.status }}
     </div>
 
-    <p>
-        When a transaction is detected, a digitalocean node will be created on your behalf and have your chosen version of Bitcoin
-        installed. It will then stay online for as much time as has been paid for. You can top-up your node at any time.
-    </p>
-
     <h3 ng-show="agent.msgs.length == 0">Pay to create your node!</h3>
     <div ng-show="agent.msgs.length > 0">
         Be sure to bookmark this URL if you would like to return to this page (or enter your email address below).
         <h3>Messages</h3>
         <p ng-repeat="m in agent.msgs track by $index">{{ m }}</p>
     </div>
+
+    <p>
+        When a transaction is detected, a vultr.com node will be created on your behalf and have your chosen version of Bitcoin
+        installed. It will then stay online for as much time as has been paid for. You can top-up your node at any time. <br>
+        If you'd like to support the running of this service, you can use this <a href="http://www.vultr.com/?ref=6844985">vultr referral link</a>.
+        Vultr is a snazzy VPS provider (and they accept Bitcoin!).
+    </p>
 
     <div id="error" class="" ng-show="agent.showError">
         <h4>Error!</h4>

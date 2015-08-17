@@ -3,7 +3,7 @@ import logging
 
 from pycoin.tx import Tx
 
-from models import unprocessed_txs, txs, all_addresses, addr_to_uid, Account, known_txs, exchange_rate
+from models import unprocessed_txs, txs, all_addresses, addr_to_uid, Account, known_txs, exchange_rate, nodes_recently_updated
 from constants import COIN
 from digitalocean_custom import calc_node_minutes
 
@@ -36,4 +36,5 @@ def process_tx_initial(tx_obj: Tx):
             account.txs.add(tx_hash)
             account.unconf_minutes.incr(calc_node_minutes(satoshi_amount=out.coin_value, exchange_rate=exchange_rate.get()))
             account.add_msg('Found tx for %.08f, %s' % (out.coin_value / COIN, txid))
+            nodes_recently_updated.append(account.uid)
 

@@ -91,7 +91,6 @@ def process_node_creations():
 def configure_droplet_loop():
     while True:
         servers = requests.get('https://api.vultr.com/v1/server/list?api_key=%s' % vultr_api_key.get()).json()
-        print('cdl', servers)
         for droplet_id, ts in droplets_to_configure:
             subid = droplet_id.decode()
             if subid in servers and servers[subid]['server_state'] == 'ok':

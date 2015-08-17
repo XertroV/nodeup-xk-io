@@ -185,6 +185,9 @@
                 .success(function(data){
                     agent.msgs = data['msgs'];
                     $log.log(agent.msgs);
+                    if (agent.msgs.length > 0) {
+                        agent.getPaymentDetailsSilent();
+                    }
                 }).error($log.log);
             var timeout = 999999999999;
             if (agent.msgs.length == 0){
