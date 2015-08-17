@@ -57,6 +57,7 @@ def process_next_creation():
             logging.error(res.content)
             nodes_recently_updated.append(next_uid)
             account.add_msg('Server creation failed... will keep retrying')
+            return 'CREATION_FAILED'
             # import pdb; pdb.set_trace()
     else:
         logging.warning('Account already has a node created.')
@@ -125,7 +126,9 @@ def check_server_for_expiration(id):
 @asyncio.coroutine
 def process_node_creations():
     while True:
-        process_next_creation()
+        response = process_next_creation()
+        if response == 'CREATION_FAILED':
+            yield from asyncio.sleep(60)
         yield from asyncio.sleep(1)
 
 
