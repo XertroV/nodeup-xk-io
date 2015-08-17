@@ -85,6 +85,7 @@ def configure_droplet(id, servers=None):
     print(stdout.read(), stderr.read())
     account.add_msg('Started compilation script on server %s -- takes about 30 minutes' % id)
     account.add_msg('Server IP: %s' % ip)
+    account.compile_ts.set(int(time.time()))
     droplets_to_configure.remove(id)
     currently_compiling.add(id)
 
@@ -96,6 +97,11 @@ def check_compiling_node(id):
     try:
         s.connect((ip, 8333))  # VEEERRRRY simple
     except:
+        # can't connect, check we're not way out in terms of time
+        if int(time.time()) - account.compile_ts.get() > 60 * 60:  # 60 min
+            account.add_msg('Possible compile issue (taking >60 minutes). Restarting.')
+            droplets_to_configure.add(id, 0)
+            currently_compiling.remove(id)
         return
     s.close()
     account.add_msg('Node detected! Check at https://getaddr.bitnodes.io/nodes/%s-%d/' % (ip, 8333))
