@@ -31,7 +31,7 @@ if __name__ == '__main__':
             logging.info('Checking %s' % txid)
             if tx_blockchain.block_height == -1:
                 continue
-            if top_height - tx_blockchain.block_height >= REQUIRED_CONFIRMATIONS:
+            if top_height - tx_blockchain.block_height + 1 >= REQUIRED_CONFIRMATIONS:  # off by one error - if tx in top block that is 1 conf
                 unprocessed_txs.remove(tx_hash)
                 for out in tx.txs_out:
                     address = out.bitcoin_address()
