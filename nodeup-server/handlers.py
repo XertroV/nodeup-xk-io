@@ -32,6 +32,7 @@ def handle(method, **params):
         tip = account.tip.get()
 
         amount = actually_charge(months, tip, exchange_rate.get())
+        # note: this URI cannot contain spaces as some wallets cannot read it.
         response['uri'] = "bitcoin:%s?amount=%.8f&label=nodeup.xk.io_sponsored_node_funding_address" % (account.address, amount)
         response['status'] = 'Payment received.' if account.unconf_minutes.get() > 0 else 'Waiting for payment...'
 
