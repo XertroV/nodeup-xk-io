@@ -16,9 +16,9 @@ logging.basicConfig(level=logging.INFO)
 
 if __name__ == '__main__':
     while True:
-        lastest_block = get_latest_block()
-        best_block_hash = lastest_block.hash
-        top_height = lastest_block.height
+        latest_block = get_latest_block()
+        best_block_hash = latest_block.hash
+        top_height = latest_block.height
         if best_block_hash == last_block_checked.get():
             time.sleep(10)  # only do this at most once per block
             continue
