@@ -24,8 +24,8 @@
         agent.firstName = '';
 
         agent.renderGreeting = function(){
-            if (agent.firstName == ''){ return "Hello," }
-            return "Hello " + agent.firstName + ",";
+            if (agent.firstName == ''){ return "Hello" }
+            return "Hello " + agent.firstName;
         }
 
         agent.showError = false;
