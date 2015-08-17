@@ -26,17 +26,15 @@ echo "/swapfile swap swap defaults 0 0" >> /etc/fstab
 echo "########### Cloning Bitcoin and Compiling"
 mkdir -p ~/src && cd ~/src
 
+URL="https://github.com/bitcoinxt/bitcoinxt.git"
 if [ "$NODE_NAME" == "Bitcoin XT" ]; then
-    git clone https://github.com/bitcoinxt/bitcoinxt.git
-    cd bitcoinxt
+    URL="https://github.com/bitcoinxt/bitcoinxt.git"
 elif [ "$NODE_NAME" == "Bitcoin Core" ]; then
-    git clone https://github.com/bitcoin/bitcoin.git
-    cd bitcoin
-else
-    git clone https://github.com/bitcoinxt/bitcoinxt.git
-    cd bitcoinxt
+    URL="https://github.com/bitcoin/bitcoin.git"
 fi
 
+git clone -q $URL bitcoin
+cd bitcoin
 
 # Add a market to track how much BitcoinAutoNode is used
 # Insert [B.A.N.] at the end of the client name, probably not compatible with BIP 14 but eh
