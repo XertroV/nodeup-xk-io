@@ -9,7 +9,7 @@ from blockchain.blockexplorer import get_tx, get_latest_block
 
 from models import last_block_checked, unprocessed_txs, Account, addr_to_uid, nodes_recently_updated, txs, all_addresses
 from constants import REQUIRED_CONFIRMATIONS, COIN
-from digitalocean import calc_node_minutes
+from digitalocean_custom import calc_node_minutes
 
 logging.basicConfig(level=logging.INFO)
 

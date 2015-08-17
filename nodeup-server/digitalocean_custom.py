@@ -31,13 +31,14 @@ def droplet_creation_json(uid, rand_region=False, ssh_fingerprints=None):
       "name": uid.decode(),
       "region": region,
       "size": "512mb",
-      "image": "ubuntu-14-04-x32",
+      "image": 13163861,
       "ssh_keys": keys,
       "backups": False,
       "ipv6": True,
       "user_data": None,
       "private_networking": None
     }
+    print(r)
     return r
 
 
@@ -46,6 +47,4 @@ def create_headers(api_key):
         'Content-Type': 'application/json',
         'Authorization': 'Bearer %s' % api_key,
     }
-    print(r)
-
     return r

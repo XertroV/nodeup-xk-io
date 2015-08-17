@@ -63,10 +63,11 @@ xpub = SimpleKVPair(db, 'xpub', str)
 
 
 # droplet management
-digitalocean_api_key = SimpleKVPair(db, 'do_api_key', str)
+vultr_api_key = SimpleKVPair(db, 'do_api_key', str)
 droplets_to_configure = ZSet(db, 'droplets_to_configure')
 droplets_active = Set(db, 'droplets_active')
 droplet_to_uid = Hash(db, 'droplet_to_uid')
+droplet_ips = Hash(db, 'droplet_ips')
 
 
 class Account:

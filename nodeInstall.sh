@@ -1,7 +1,10 @@
 #!/bin/bash
 
-FIRSTNAME=$1
-NODE_NAME=$2
+FIRSTNAME="$1"
+NODE_NAME="$2"
+
+echo "Firstname: $FIRSTNAME"
+echo "Node name: $NODE_NAME"
 
 echo "########### The server will reboot when the script is complete"
 echo "########### Changing to home dir"
@@ -66,8 +69,9 @@ randPass=`< /dev/urandom tr -dc A-Za-z0-9 | head -c30`
 echo "rpcuser=$randUser" >> $config
 echo "rpcpassword=$randPass" >> $config
 
-# set prune amount to size of `/` 60% (and then by /1000 to turn KB to MB) => /1666
-echo "prune="$(expr $(df | grep '/$' | tr -s ' ' | cut -d ' ' -f 2) / 1666) >> $config # safe enough for now
+# don't need to prune on large volumes, yay!
+# # set prune amount to size of `/` 60% (and then by /1000 to turn KB to MB) => /1666
+# # echo "prune="$(expr $(df | grep '/$' | tr -s ' ' | cut -d ' ' -f 2) / 1666) >> $config # safe enough for now
 
 echo "########### Setting up autostart (cron)"
 crontab -l > tempcron

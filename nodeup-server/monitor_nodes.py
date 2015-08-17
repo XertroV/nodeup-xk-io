@@ -7,14 +7,23 @@ import logging
 import subprocess
 import asyncio
 
-
+from paramiko.client import SSHClient, AutoAddPolicy, HostKeys
 import requests
 
-from models import last_block_checked, unprocessed_txs, Account, addr_to_uid, nodes_recently_updated, ssh_management_key, digitalocean_api_key, droplet_to_uid, droplets_to_configure, droplet_ips
+from models import last_block_checked, unprocessed_txs, Account, addr_to_uid, nodes_recently_updated, ssh_management_key, vultr_api_key, droplet_to_uid, droplets_to_configure, droplet_ips, ssh_auditor_key
 from constants import REQUIRED_CONFIRMATIONS, COIN, MIN_TIME
-from digitalocean import calc_node_minutes, regions, droplet_creation_json, create_headers
+from digitalocean_custom import calc_node_minutes, regions, droplet_creation_json, create_headers
 
-headers = create_headers(digitalocean_api_key.get())
+logging.basicConfig(level=logging.INFO)
+
+headers = create_headers(vultr_api_key.get())
+
+def ssh(hostname, username, password, cmd):
+    client = SSHClient()
+    client.set_missing_host_key_policy(AutoAddPolicy())
+    client.connect(hostname, username=username, password=password, timeout=3)
+    stdin, stdout, stderr = client.exec_command(cmd)
+    return stdin, stdout, stderr
 
 def process_next_creation():
     if len(nodes_recently_updated) == 0:
@@ -27,41 +36,49 @@ def process_next_creation():
             account.add_msg('Node creation failed! A minimum of %d minutes need to be purchased at a time. You need %d more minutes.' % (MIN_TIME, MIN_TIME - account.total_minutes))
             return
         account.add_msg('Creating node now.')
-        creation_request = droplet_creation_json(account.uid, ssh_fingerprints=[ssh_management_key.get()])
-        res = requests.post("https://api.digitalocean.com/v2/droplets", json=creation_request, headers=headers)
-        if res.status_code == 202:  # accepted
+        res = requests.post("https://api.vultr.com/v1/server/create?api_key=%s" % vultr_api_key.get(),
+                            data={"DCID": 1, "VPSPLANID": 87, "OSID": 192, "SSHKEYID": ssh_management_key.get()})
+        if res.status_code == 200:  # accepted
             response = res.json()
-            created_at = datetime.datetime.strptime(response['droplet']['created_at'], "%Y-%m-%dT%H:%M:%SZ")
-            account.creation_ts.set(created_at.timestamp())
-            account.droplet_id.set(response['droplet']['id'])
+            subid = response['SUBID']
+            logging.info(response)
+            account.creation_ts.set(int(time.time()))
+            account.droplet_id.set(subid)
             account.node_created.set(True)
-            droplets_to_configure.add(response['droplet']['id'])
-            droplet_to_uid[response['droplet']['id']] = account.uid
+            droplets_to_configure.add(subid, account.creation_ts.get())
+            droplet_to_uid[subid] = account.uid
             account.add_msg('Node created successfully! Node ID %s' % (account.droplet_id.get(),))
         else:
             logging.error('Node creation failed! Status %d' % res.status_code)
-            logging.error(res)
+            logging.error(res.content)
             # import pdb; pdb.set_trace()
     else:
         logging.warning('Account already has a node created.')
 
 
-def configure_droplet(id, ts):
-        droplet_res = requests.get('https://api.digitalocean.com/v2/droplets/%s' % id, headers=headers)
-        if droplet_res.status_code == 200:
-            account = Account(droplet_to_uid[id])
-            droplet = droplet_res.json()
-            droplet_ips[id] = droplet['networks']['v4'][0]['ip_address']
-            ip = droplet['networks']['v4'][0]['ip_address']
-            # test if sshable
-            proc = subprocess.Popen(['ssh', 'root@%s' % ip, 'wget https://raw.githubusercontent.com/XertroV/nodeup-xk-io/master/nodeInstall.sh && screen -mdS bi bash nodeInstaller.sh "%s" "%s"' % (account.name.get(), account.client.get())],
-                                    stdin=subprocess.PIPE)
-            proc.communicate(file_contents)
-            if proc.retcode != 0:
-                account.add_msg('Droplet IP: %s' % ip)
-                droplets_to_configure.remove(next_droplet_id)
-        else:
-            logging.error('Could not access node with id %d' % id)
+def configure_droplet(id, servers=None):
+    if servers is None:
+        servers = requests.get('https://api.vultr.com/v1/server/list?api_key=%s' % vultr_api_key.get()).json()
+    logging.info('Configuring %s' % id)
+    account = Account(droplet_to_uid[id])
+    droplet = servers[id]
+    logging.info('Got droplet %s' % repr(droplet))
+    ip = droplet['main_ip']
+    password = droplet['default_password']
+    droplet_ips[id] = ip
+    # ssh
+    exec = 'curl https://raw.githubusercontent.com/XertroV/nodeup-xk-io/master/nodeInstall.sh  > nodeInstall.sh; bash nodeInstall.sh "%s" "%s" > ~/installLog'  # this seems to run okay in the background like this :shrug:
+    try:
+        print('root', password, ip)
+        _, stdout, stderr = ssh(ip, 'root', password, exec % (account.name.get(), account.client.get()))
+    except Exception as e:
+        print(e)
+        logging.error('could not configure droplet %s due to %s' % (id, repr(e)))
+        return
+    print(stdout.read(), stderr.read())
+    account.add_msg('Started install script on node %s -- takes about 30 minutes' % id)
+    account.add_msg('Droplet IP: %s' % ip)
+    droplets_to_configure.remove(id)
 
 
 @asyncio.coroutine
@@ -73,21 +90,21 @@ def process_node_creations():
 @asyncio.coroutine
 def configure_droplet_loop():
     while True:
+        servers = requests.get('https://api.vultr.com/v1/server/list?api_key=%s' % vultr_api_key.get()).json()
+        print('cdl', servers)
         for droplet_id, ts in droplets_to_configure:
-            configure_droplet(droplet_id, ts)
+            subid = droplet_id.decode()
+            if subid in servers and servers[subid]['server_state'] == 'ok':
+                configure_droplet(subid, servers)
             yield from asyncio.sleep(1)  # give other things a chance every once and a while
         yield from asyncio.sleep(60)
 
 
 
 if __name__ == '__main__':
-    while True:
-        if len(nodes_recently_updated) == 0 and len(droplets_to_configure) == 0:
-            print('sleeping')
-            time.sleep(10)
-            continue
-        process_next_creation()
-        configure_next_node()
+    asyncio.async(process_node_creations())
+    asyncio.async(configure_droplet_loop())
+    asyncio.get_event_loop().run_forever()
 
 
 

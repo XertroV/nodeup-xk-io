@@ -5,7 +5,7 @@ import hashlib
 import simplejson as json
 
 from models import node_accounts, total_nodeminutes, db, Account, first_names, exchange_rate
-from digitalocean import actually_charge
+from digitalocean_custom import actually_charge
 
 with open('static/index.html') as f:
     index_file = f.read()

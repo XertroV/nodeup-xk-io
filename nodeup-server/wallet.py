@@ -5,7 +5,7 @@ from pycoin.tx import Tx
 
 from models import unprocessed_txs, txs, all_addresses, addr_to_uid, Account, known_txs, exchange_rate
 from constants import COIN
-from digitalocean import calc_node_minutes
+from digitalocean_custom import calc_node_minutes
 
 def hash_to_hex(h):
     return hexlify(h[::-1])
