@@ -12,9 +12,11 @@ def calculate_cost_in_dollars(months):
 def actually_charge(months, tip, exchange_rate=1.0):
     return calculate_cost_in_dollars(months) * (1 + tip) / exchange_rate
 
-def calc_node_minutes(satoshi_amount=None, dollar_amount=None, exchange_rate=1.0):
+def calc_node_minutes(satoshi_amount=None, dollar_amount=None, exchange_rate=None):
     if (satoshi_amount is None and dollar_amount is None) or (satoshi_amount is not None and dollar_amount is not None):
         raise AttributeError('Exactly one of satoshi_amount or dollar_amount is needed')
+    if exchange_rate is None:
+        raise ValueError('Exchange rate not provided')
     if satoshi_amount is not None:
         coins = satoshi_amount / COIN
         dollars = exchange_rate * coins

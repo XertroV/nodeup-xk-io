@@ -78,8 +78,8 @@ class Account:
         self.db = db
         self.uid = uid
         # these need to be first for create_new_address()
-        self.total_coins = SimpleKVPair(self.db, 'uid_total_coins:%s' % uid, Decimal)
-        self.total_minutes = SimpleKVPair(self.db, 'uid_total_minutes:%s' % uid, Decimal)
+        self.total_coins = SimpleKVPair(self.db, 'uid_total_coins:%s' % uid, int, default=0)
+        self.total_minutes = SimpleKVPair(self.db, 'uid_total_minutes:%s' % uid, int, default=0)
         if uid not in uid_to_addr:
             self.create_new_address()
         self.address = uid_to_addr[uid].decode()
