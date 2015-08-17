@@ -34,7 +34,7 @@ def process_next_creation():
     account = Account(next_uid)
     if not account.node_created.get():
         if account.unconf_minutes.get() < MIN_TIME:
-            account.add_msg('Node creation failed! A minimum of %d minutes need to be purchased at a time. You need %d more minutes.' % (MIN_TIME, MIN_TIME - account.total_minutes))
+            account.add_msg('Node creation failed! A minimum of %d minutes need to be purchased at a time. You need %d more minutes.' % (MIN_TIME, MIN_TIME - account.total_minutes.get()))
             return
         account.add_msg('Creating node now. ETA 10 minutes.')
         res = requests.post("https://api.vultr.com/v1/server/create?api_key=%s" % vultr_api_key.get(),
