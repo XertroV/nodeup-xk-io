@@ -55,6 +55,8 @@ def process_next_creation():
         else:
             logging.error('Server creation failed! Status %d' % res.status_code)
             logging.error(res.content)
+            nodes_recently_updated.append(next_uid)
+            account.add_msg('Server creation failed... will keep retrying')
             # import pdb; pdb.set_trace()
     else:
         logging.warning('Account already has a node created.')
