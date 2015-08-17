@@ -80,7 +80,7 @@ def configure_droplet(id, servers=None):
         logging.error('could not configure server %s due to %s' % (id, repr(e)))
         return
     print(stdout.read(), stderr.read())
-    account.add_msg('Started compilation script on node %s -- takes about 30 minutes' % id)
+    account.add_msg('Started compilation script on server %s -- takes about 30 minutes' % id)
     account.add_msg('Server IP: %s' % ip)
     droplets_to_configure.remove(id)
     currently_compiling.add(id)
