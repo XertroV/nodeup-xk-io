@@ -67,12 +67,11 @@ xpub = SimpleKVPair(db, 'xpub', str)
 # droplet management
 vultr_api_key = SimpleKVPair(db, 'do_api_key', str)
 droplets_to_configure = ZSet(db, 'droplets_to_configure')
-droplets_active = Set(db, 'droplets_active')
 droplet_to_uid = Hash(db, 'droplet_to_uid')
 droplet_ips = Hash(db, 'droplet_ips')
 currently_compiling = Set(db, 'currently_compiling')
 nodes_currently_syncing = Set(db, 'currently_syncing')
-
+active_servers = Set(db, 'active_servers')
 
 class Account:
     def __init__(self, uid):
@@ -120,3 +119,10 @@ class Account:
         else:
             return datetime.datetime.fromtimestamp(self.creation_ts.get() + self.total_minutes.get() * 60)
 
+    def destroy(self):
+        self.total_coins.set(0)
+        self.total_minutes.set(0)
+        self.unconf_minutes.set(0)
+        self.node_created.set(False)
+        self.droplet_id.set('')
+        self.creation_ts.set(0)

@@ -11,7 +11,7 @@ import socket
 from paramiko.client import SSHClient, AutoAddPolicy, HostKeys
 import requests
 
-from models import currently_compiling, Account, nodes_recently_updated, ssh_management_key, vultr_api_key, droplet_to_uid, droplets_to_configure, droplet_ips, nodes_currently_syncing
+from models import currently_compiling, Account, nodes_recently_updated, ssh_management_key, vultr_api_key, droplet_to_uid, droplets_to_configure, droplet_ips, nodes_currently_syncing, active_servers
 from constants import REQUIRED_CONFIRMATIONS, COIN, MIN_TIME
 from digitalocean_custom import calc_node_minutes, regions, droplet_creation_json, create_headers
 
@@ -19,12 +19,14 @@ logging.basicConfig(level=logging.INFO)
 
 headers = create_headers(vultr_api_key.get())
 
+
 def ssh(hostname, username, password, cmd):
     client = SSHClient()
     client.set_missing_host_key_policy(AutoAddPolicy())
     client.connect(hostname, username=username, password=password, timeout=3)
     stdin, stdout, stderr = client.exec_command(cmd)
     return stdin, stdout, stderr
+
 
 def process_next_creation():
     if len(nodes_recently_updated) == 0:
@@ -48,6 +50,7 @@ def process_next_creation():
             account.node_created.set(True)
             droplets_to_configure.add(subid, account.creation_ts.get())
             droplet_to_uid[subid] = account.uid
+            active_servers.add(subid)
             account.add_msg('Node created successfully! Node ID %s' % (account.droplet_id.get(),))
         else:
             logging.error('Node creation failed! Status %d' % res.status_code)
@@ -98,11 +101,31 @@ def check_compiling_node(id):
     nodes_currently_syncing.add(id)
 
 
+def check_server_for_expiration(id):
+    account = Account(droplet_to_uid[id])
+    now = int(time.time())
+    creation_ts = account.creation_ts.get()
+    paid_minutes = account.total_minutes.get()
+    if now - creation_ts < (MIN_TIME * 60):  # created in within the last MIN_TIME
+        return
+    if now > creation_ts + paid_minutes * 60:
+        # then destroy
+        res = requests.post("https://api.vultr.com/v1/server/destroy?api_key=%s" % vultr_api_key.get(),
+                            data={"SUBID": int(id)})
+        if res.status_code == 200:
+            account.destroy()
+            account.add_msg('Node minutes consumed in total, node destroyed.')
+        else:
+            logging.error('Could not destroy server! %s' % id)
+            account.add_msg('Attempted to destroy node (unpaid into future) but I failed :(')
+
+
 @asyncio.coroutine
 def process_node_creations():
     while True:
         process_next_creation()
         yield from asyncio.sleep(1)
+
 
 @asyncio.coroutine
 def configure_droplet_loop():
@@ -115,6 +138,7 @@ def configure_droplet_loop():
             yield from asyncio.sleep(1)  # give other things a chance every once and a while
         yield from asyncio.sleep(60)
 
+
 @asyncio.coroutine
 def check_compiling_loop():
     while True:
@@ -124,10 +148,20 @@ def check_compiling_loop():
         yield from asyncio.sleep(60)
 
 
+@asyncio.coroutine
+def destroy_unpaid_loop():
+    while True:
+        for id in active_servers.members():
+            check_server_for_expiration(id)
+            yield from asyncio.sleep(1)
+        yield from asyncio.sleep(60)
+
+
 if __name__ == '__main__':
     asyncio.async(process_node_creations())
     asyncio.async(configure_droplet_loop())
     asyncio.async(check_compiling_loop())
+    asyncio.async(destroy_unpaid_loop())
     asyncio.get_event_loop().run_forever()
 
 
