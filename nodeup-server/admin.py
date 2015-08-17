@@ -17,6 +17,7 @@ parser.add_argument('--test-uid-create-node', help='Provide UID to test node cre
 parser.add_argument('--msgs-for-uid', help='provide uid get msgs', type=str, default='')
 parser.add_argument('--configure-droplet', help='Provide ID of droplet to be configured', type=str, default='')
 parser.add_argument('--create-startup-script', help='create a new startup script for nodes on first boot')
+parser.add_argument('--show-account', help='provide uid get account deets', type=str)
 args = parser.parse_args()
 
 if args.ssh_management_key != '':
@@ -45,3 +46,10 @@ if args.msgs_for_uid != '':
 if args.configure_droplet != '':
     droplets_to_configure.add(args.configure_droplet, 0)
     configure_droplet(args.configure_droplet)
+
+if args.create_startup_script != '':
+    raise Exception('Unimplemented')
+
+if args.show_account != '':
+    account = Account(process_uid(args.show_account))
+    import pdb; pdb.set_trace()
