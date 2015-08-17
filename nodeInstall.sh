@@ -52,13 +52,13 @@ make
 make install
 
 echo "########### Create Bitcoin User"
-useradd -m bitcoin
+useradd -m user
 
 echo "########### Creating config"
-cd ~bitcoin
-sudo -u bitcoin mkdir .bitcoin
+cd ~user
+sudo -u user mkdir .bitcoin
 config=".bitcoin/bitcoin.conf"
-sudo -u bitcoin touch $config
+sudo -u user touch $config
 echo "server=1" > $config
 echo "daemon=1" >> $config
 echo "connections=40" >> $config
@@ -79,10 +79,27 @@ rm tempcron
 
 # only way I've been able to get it reliably to start on boot
 # (didn't want to use a service with systemd so it could be used with older ubuntu versions, but systemd is preferred)
-sed -i '2a\
-sudo -u bitcoin /usr/local/bin/bitcoind' /etc/rc.local
+# sed -i '2a\
+#sudo -u bitcoin /usr/local/bin/bitcoind' /etc/rc.local
+
+echo """[Unit]
+Description=Bitcoind service for a node.
+After=network.target
+
+[Service]
+Type=forking
+ExecStart=/usr/local/bin/bitcoind -datadir=/home/user/.bitcoin/
+ExecStop=/usr/local/bin/bitcoin-cli -datadir=/home/user/.bitcoin/ stop
+PIDFile=/home/user/.bitcoin/bitcoind.pid
+Restart=always
+User=user
+
+[Install]
+WantedBy=multi-user.target
+""" > /etc/systemd/system/bitcoind.service
+systemctl enable bitcoind
 
 echo "############ Add an alias for easy use"
-echo "alias btc=\"sudo -u bitcoin bitcoin-cli -datadir=/home/bitcoin/.bitcoin\"" >> ~/.bashrc  # example use: btc getinfo
+echo "alias btc=\"sudo -u user bitcoin-cli -datadir=/home/bitcoin/.bitcoin\"" >> ~/.bashrc  # example use: btc getinfo
 
 reboot

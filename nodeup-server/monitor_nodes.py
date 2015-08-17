@@ -59,8 +59,8 @@ def process_next_creation():
 def configure_droplet(id, servers=None):
     if servers is None:
         servers = requests.get('https://api.vultr.com/v1/server/list?api_key=%s' % vultr_api_key.get()).json()
-    logging.info('Configuring %s' % id)
     account = Account(droplet_to_uid[id])
+    logging.info('Configuring %s for %s' % (id, account.uid))
     droplet = servers[id]
     logging.info('Got droplet %s' % repr(droplet))
     ip = droplet['main_ip']
