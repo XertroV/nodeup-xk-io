@@ -2,6 +2,7 @@ import json
 import hashlib
 from decimal import Decimal
 import datetime
+import time
 
 from pycoin.key.BIP32Node import BIP32Node
 
@@ -62,6 +63,7 @@ known_blocks = Set(db, 'known_blocks')
 all_addresses = Set(db, 'all_addresses')
 n_addresses = SimpleKVPair(db, 'n_addresses', int)
 xpub = SimpleKVPair(db, 'xpub', str)
+all_msgs = List(db, 'all_msgs')
 
 
 # droplet management
@@ -111,7 +113,9 @@ class Account:
         return self.msgs[:n]
 
     def add_msg(self, msg):
-        self.msgs.prepend(msg)
+        now = int(time.time())
+        self.msgs.prepend("%d: %s" % (now, msg))
+        all_msgs.prepend("%d, %s: %s" % (now, self.uid, msg))
 
     def get_expiry(self):
         if not self.node_created.get():
