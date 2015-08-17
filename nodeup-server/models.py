@@ -22,6 +22,8 @@ class SimpleKVPair:
         self.db[self.key] = value
 
     def get(self):
+        if self.key not in db:
+            return self.default
         if self.type is bool:
             if self.db[self.key] == b"False":
                 return False
