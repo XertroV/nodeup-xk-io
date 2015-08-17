@@ -33,7 +33,7 @@ elif [ "$NODE_NAME" == "Bitcoin Core" ]; then
     URL="https://github.com/bitcoin/bitcoin.git"
 fi
 
-git clone -q $URL bitcoin
+git clone "$URL" bitcoin 2>&1
 cd bitcoin
 
 # Add a market to track how much BitcoinAutoNode is used
