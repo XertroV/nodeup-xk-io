@@ -92,7 +92,7 @@ def check_compiling_node(id):
     except:
         return
     s.close()
-    account.add_msg('Node detected! Check at <a href="https://getaddr.bitnodes.io/nodes/%s-%d/">getaddr.bitnodes.io</a>')
+    account.add_msg('Node detected! Check at https://getaddr.bitnodes.io/nodes/%s-%d/' % (ip, 8333))
     logging.info('Detected node %s' % id)
     currently_compiling.remove(id)
     nodes_currently_syncing.add(id)
