@@ -71,6 +71,7 @@ droplets_active = Set(db, 'droplets_active')
 droplet_to_uid = Hash(db, 'droplet_to_uid')
 droplet_ips = Hash(db, 'droplet_ips')
 currently_compiling = Set(db, 'currently_compiling')
+nodes_currently_syncing = Set(db, 'currently_syncing')
 
 
 class Account:

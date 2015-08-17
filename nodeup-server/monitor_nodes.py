@@ -6,11 +6,12 @@ import datetime
 import logging
 import subprocess
 import asyncio
+import socket
 
 from paramiko.client import SSHClient, AutoAddPolicy, HostKeys
 import requests
 
-from models import currently_compiling, Account, nodes_recently_updated, ssh_management_key, vultr_api_key, droplet_to_uid, droplets_to_configure, droplet_ips
+from models import currently_compiling, Account, nodes_recently_updated, ssh_management_key, vultr_api_key, droplet_to_uid, droplets_to_configure, droplet_ips, nodes_currently_syncing
 from constants import REQUIRED_CONFIRMATIONS, COIN, MIN_TIME
 from digitalocean_custom import calc_node_minutes, regions, droplet_creation_json, create_headers
 
@@ -85,7 +86,16 @@ def configure_droplet(id, servers=None):
 def check_compiling_node(id):
     account = Account(droplet_to_uid[id])
     ip = droplet_ips[id].decode()
-
+    s = socket.socket()
+    try:
+        s.connect((ip, 8333))  # VEEERRRRY simple
+    except:
+        return
+    s.close()
+    account.add_msg('Node detected! Check at <a href="https://getaddr.bitnodes.io/nodes/%s-%d/">getaddr.bitnodes.io</a>')
+    logging.info('Detected node %s' % id)
+    currently_compiling.remove(id)
+    nodes_currently_syncing.add(id)
 
 
 @asyncio.coroutine
@@ -105,11 +115,19 @@ def configure_droplet_loop():
             yield from asyncio.sleep(1)  # give other things a chance every once and a while
         yield from asyncio.sleep(60)
 
+@asyncio.coroutine
+def check_compiling_loop():
+    while True:
+        for id in currently_compiling.members():
+            check_compiling_node(id)
+            yield from asyncio.sleep(1)
+        yield from asyncio.sleep(60)
 
 
 if __name__ == '__main__':
     asyncio.async(process_node_creations())
     asyncio.async(configure_droplet_loop())
+    asyncio.async(check_compiling_loop())
     asyncio.get_event_loop().run_forever()
 
 
