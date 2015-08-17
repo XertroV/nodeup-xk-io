@@ -44,7 +44,7 @@ if __name__ == '__main__':
                     node_minutes_d = calc_node_minutes(satoshis)
                     account.total_minutes.incr(node_minutes_d)
                     account.add_msg('Detected payment via txid: %s' % (txid,))
-                    account.add_msg('Increased total paid by %.8f to %.8f (considering tip of %d %)' % (out.coin_value / COIN, account.total_coins.get() / COIN, account.tip.get() * 100))
+                    account.add_msg('Increased total paid by %.8f to %.8f (considering tip of %d %%)' % (out.coin_value / COIN, account.total_coins.get() / COIN, account.tip.get() * 100))
                     account.add_msg('Increased node life by %d minutes; expiring around %s' % (node_minutes_d, account.get_expiry().isoformat()))
                     nodes_recently_updated.append(account.uid)
 

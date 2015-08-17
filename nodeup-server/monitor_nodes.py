@@ -10,7 +10,7 @@ import asyncio
 from paramiko.client import SSHClient, AutoAddPolicy, HostKeys
 import requests
 
-from models import last_block_checked, unprocessed_txs, Account, addr_to_uid, nodes_recently_updated, ssh_management_key, vultr_api_key, droplet_to_uid, droplets_to_configure, droplet_ips, ssh_auditor_key
+from models import currently_compiling, Account, nodes_recently_updated, ssh_management_key, vultr_api_key, droplet_to_uid, droplets_to_configure, droplet_ips
 from constants import REQUIRED_CONFIRMATIONS, COIN, MIN_TIME
 from digitalocean_custom import calc_node_minutes, regions, droplet_creation_json, create_headers
 
@@ -79,6 +79,13 @@ def configure_droplet(id, servers=None):
     account.add_msg('Started compilation script on node %s -- takes about 30 minutes' % id)
     account.add_msg('Droplet IP: %s' % ip)
     droplets_to_configure.remove(id)
+    currently_compiling.add(id)
+
+
+def check_compiling_node(id):
+    account = Account(droplet_to_uid[id])
+    ip = droplet_ips[id].decode()
+
 
 
 @asyncio.coroutine

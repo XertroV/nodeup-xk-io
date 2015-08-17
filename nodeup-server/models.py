@@ -70,6 +70,7 @@ droplets_to_configure = ZSet(db, 'droplets_to_configure')
 droplets_active = Set(db, 'droplets_active')
 droplet_to_uid = Hash(db, 'droplet_to_uid')
 droplet_ips = Hash(db, 'droplet_ips')
+currently_compiling = Set(db, 'currently_compiling')
 
 
 class Account:

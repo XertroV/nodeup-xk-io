@@ -53,7 +53,7 @@
         <h3>Messages <button class="btn btn-outline h6" ng-click="agent.nMsgs = 999999; agent._updateMsgs()">Show All</button></h3>
         <hr>
             <ul>
-                <li ng-repeat="m in agent.msgs track by $index">{{ m }}</li>
+                <li class="left-align" ng-repeat="m in agent.msgs track by $index">{{ m }}</li>
             </ul>
         <hr>
     </div>
