@@ -47,7 +47,7 @@ fi
 sed -i "s/return ss.str();/return ss.str() + \"[NodeUp.xk.io]$EXTRA\";/" src/clientversion.cpp
 
 ./autogen.sh
-./configure --without-gui --without-upnp --disable-tests
+./configure --without-gui --without-upnp --disable-tests --disable-wallet
 make
 make install
 
