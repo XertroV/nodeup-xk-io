@@ -16,8 +16,8 @@ parser.add_argument('--xpub', help='Set xpub key', type=str, default='')
 parser.add_argument('--test-uid-create-node', help='Provide UID to test node creation', type=str, default='')
 parser.add_argument('--msgs-for-uid', help='provide uid get msgs', type=str, default='')
 parser.add_argument('--configure-droplet', help='Provide ID of droplet to be configured', type=str, default='')
-parser.add_argument('--create-startup-script', help='create a new startup script for nodes on first boot')
-parser.add_argument('--show-account', help='provide uid get account deets', type=str)
+parser.add_argument('--create-startup-script', help='create a new startup script for nodes on first boot', default='')
+parser.add_argument('--show-account', help='provide uid get account deets', type=str, default='', type=str)
 args = parser.parse_args()
 
 if args.ssh_management_key != '':
