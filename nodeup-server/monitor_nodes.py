@@ -38,7 +38,7 @@ def process_next_creation():
         if account.unconf_minutes.get() < MIN_TIME:
             account.add_msg('Node creation failed! A minimum of %d minutes need to be purchased at a time. You need %d more minutes.' % (MIN_TIME, MIN_TIME - account.unconf_minutes.get()))
             return
-        account.add_msg('Creating node now. ETA 10-20 minutes.')
+        account.add_msg('Creating server now. ETA 10-20 minutes.')
         res = requests.post("https://api.vultr.com/v1/server/create?api_key=%s" % vultr_api_key.get(),
                             data={"DCID": 1, "VPSPLANID": 87, "OSID": 192, "SSHKEYID": ssh_management_key.get()})
         if res.status_code == 200:  # accepted
@@ -51,9 +51,9 @@ def process_next_creation():
             droplets_to_configure.add(subid, account.creation_ts.get())
             droplet_to_uid[subid] = account.uid
             active_servers.add(subid)
-            account.add_msg('Node created successfully! Node ID %s' % (account.droplet_id.get(),))
+            account.add_msg('Server created successfully! Server ID %s' % (account.droplet_id.get(),))
         else:
-            logging.error('Node creation failed! Status %d' % res.status_code)
+            logging.error('Server creation failed! Status %d' % res.status_code)
             logging.error(res.content)
             # import pdb; pdb.set_trace()
     else:
@@ -66,7 +66,7 @@ def configure_droplet(id, servers=None):
     account = Account(droplet_to_uid[id])
     logging.info('Configuring %s for %s' % (id, account.uid))
     droplet = servers[id]
-    logging.info('Got droplet %s' % repr(droplet))
+    logging.info('Got server %s' % repr(droplet))
     ip = droplet['main_ip']
     password = droplet['default_password']
     droplet_ips[id] = ip
@@ -77,11 +77,11 @@ def configure_droplet(id, servers=None):
         _, stdout, stderr = ssh(ip, 'root', password, exec % (account.name.get(), account.client.get()))
     except Exception as e:
         print(e)
-        logging.error('could not configure droplet %s due to %s' % (id, repr(e)))
+        logging.error('could not configure server %s due to %s' % (id, repr(e)))
         return
     print(stdout.read(), stderr.read())
     account.add_msg('Started compilation script on node %s -- takes about 30 minutes' % id)
-    account.add_msg('Droplet IP: %s' % ip)
+    account.add_msg('Server IP: %s' % ip)
     droplets_to_configure.remove(id)
     currently_compiling.add(id)
 
