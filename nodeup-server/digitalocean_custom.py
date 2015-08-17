@@ -20,7 +20,7 @@ def calc_node_minutes(satoshi_amount=None, dollar_amount=None, exchange_rate=1.0
         dollars = exchange_rate * coins
     else:
         dollars = dollar_amount
-    return dollars / DOLLARS_PER_MONTH * MINUTES_PER_MONTH
+    return int(dollars / DOLLARS_PER_MONTH * MINUTES_PER_MONTH)
 
 
 
