@@ -70,7 +70,7 @@
         {{ agent.error }}
     </div>
 
-    <h2>{{ agent.nodeMinutes / (30 * 24 * 60) }} NodeMonths paid for so far.</h2>
+    <h2>{{ agent.nodeMinutes / (30 * 24 * 60) | number:2 }} NodeMonths paid for so far.</h2>
 
     <div id="advanced">
         <h2 class="">Advanced</h2>
