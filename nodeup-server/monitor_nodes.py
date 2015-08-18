@@ -42,8 +42,9 @@ def process_next_creation():
             account.add_msg('Node creation failed as it has already been destroyed, please use a new account and contact Max to get your coins back.')
             return
         account.add_msg('Creating server now. ETA 10-20 minutes.')
+        dcid = random.choice([1, 5, 7])  # NJ, LA, Amsterdam
         res = requests.post("https://api.vultr.com/v1/server/create?api_key=%s" % vultr_api_key.get(),
-                            data={"DCID": 1, "VPSPLANID": 87, "OSID": 192, "SSHKEYID": ssh_management_key.get()})
+                            data={"DCID": dcid, "VPSPLANID": 87, "OSID": 192, "SSHKEYID": ssh_management_key.get()})
         if res.status_code == 200:  # accepted
             response = res.json()
             subid = response['SUBID']
