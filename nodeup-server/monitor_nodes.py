@@ -115,10 +115,11 @@ def check_server_for_expiration(id):
     now = int(time.time())
     creation_ts = account.creation_ts.get()
     paid_minutes = account.total_minutes.get()
-    if now - creation_ts < (MIN_TIME * 60):  # created in within the last MIN_TIME
+    if (now - creation_ts) < (MIN_TIME * 60):  # created in within the last MIN_TIME
         return
-    if now > creation_ts + paid_minutes * 60:
+    if now > (creation_ts + paid_minutes * 60):
         # then destroy
+        logging.warning('Destroying node %s' % id)
         res = requests.post("https://api.vultr.com/v1/server/destroy?api_key=%s" % vultr_api_key.get(),
                             data={"SUBID": int(id)})
         if res.status_code == 200:
@@ -127,6 +128,8 @@ def check_server_for_expiration(id):
         else:
             logging.error('Could not destroy server! %s' % id)
             account.add_msg('Attempted to destroy node (unpaid into future) but I failed :(')
+
+    logging.info('Checked for expr %s' % id)
 
 
 @asyncio.coroutine
