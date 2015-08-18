@@ -3,7 +3,7 @@
 import argparse
 import logging
 
-from models import ssh_management_key, vultr_api_key, xpub, Account, nodes_recently_updated, db, ssh_auditor_key, droplets_to_configure, active_servers, droplet_to_uid
+from models import ssh_management_key, vultr_api_key, xpub, Account, nodes_recently_updated, db, ssh_auditor_key, droplets_to_configure, active_servers, droplet_to_uid, all_msgs
 from handlers import process_uid
 from constants import MIN_TIME
 from monitor_nodes import process_next_creation, configure_droplet
@@ -21,6 +21,7 @@ parser.add_argument('--configure-droplet', help='Provide ID of droplet to be con
 parser.add_argument('--create-startup-script', help='create a new startup script for nodes on first boot', default='')
 parser.add_argument('--show-account', help='provide uid get account deets', type=str, default='')
 parser.add_argument('--show-all-active-nodes', help='provide a summary of all active nodes', action='store_true')
+parser.add_argument('--show-last-n-msgs', type=int, default=0, help='Show last n msgs (global)')
 args = parser.parse_args()
 
 if args.ssh_management_key != '':
@@ -62,3 +63,8 @@ if args.show_all_active_nodes:
     for id in active_servers:
         account = Account(droplet_to_uid[id])
         print(account.pretty_string())
+
+if args.show_last_n_msgs != 0:
+    n = args.show_last_n_msgs
+    for msg in all_msgs[:n]:
+        print(msg)
