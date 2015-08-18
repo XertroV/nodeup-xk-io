@@ -15,6 +15,7 @@
         agent.initial = true;
         agent.totalMinutesPaid = 0;
         agent.totalCoinsPaid = 0;
+        agent.activeNodes = 0;
 
         agent.tip = 10;
         agent.exchangeRate = 100000000000;
@@ -88,6 +89,7 @@
                     agent.nodeMinutes = data['nodeMinutes'];
                     agent.totalMinutesPaid = data['totalMinutesPaid'];
                     agent.totalCoinsPaid = data['totalCoinsPaid'];
+                    agent.activeNodes = data['activeNodes'];
                     $log.log(data);
                 }).error($log.log);
             setTimeout(agent.loadStats, 60 * 1000); // update once a min
