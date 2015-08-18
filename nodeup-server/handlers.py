@@ -24,7 +24,6 @@ def handle(method, **params):
         'client': account.client,
         'tip': account.tip,
     }
-    print(params)
 
     if method == 'getPaymentDetails':
         client = params['client']
