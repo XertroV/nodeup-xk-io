@@ -137,6 +137,7 @@ class Account:
     Total Coins   : {total_coins}
     Total Months  : {total_minutes}
     Server ID     : {server_id}
+    Server IP     : {server_ip}
     Expiry        : {expiry}
 
     take 3 account.msgs
@@ -144,4 +145,4 @@ class Account:
 
 """.format(uid=self.uid, address=self.address, n_txs=len(self.txs), total_coins=self.total_coins.get(),
            total_minutes=self.total_minutes.get(), server_id=self.droplet_id.get(), msgs=self.get_msgs(3),
-           expiry=self.get_expiry().isoformat())
+           expiry=self.get_expiry().isoformat(), server_ip=droplet_ips[self.droplet_id.get()])
