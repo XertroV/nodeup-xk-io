@@ -58,6 +58,7 @@ if args.show_account != '':
     print(account.pretty_string())
 
 if args.show_all_active_nodes:
+    print('%d servers total' % len(active_servers))
     for id in active_servers:
         account = Account(droplet_to_uid[id])
         print(account.pretty_string())

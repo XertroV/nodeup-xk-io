@@ -131,6 +131,7 @@ class Account:
         self.node_created.set(False)
         self.droplet_id.set('')
         self.creation_ts.set(0)
+        self.add_msg('Node destroyed.')
 
     def pretty_string(self):
         return """Account: {uid}
@@ -139,9 +140,11 @@ class Account:
     Total Coins   : {total_coins}
     Total Months  : {total_minutes}
     Server ID     : {server_id}
+    Expiry        : {expiry}
 
     take 3 account.msgs
         {msgs}
 
 """.format(uid=self.uid, address=self.address, n_txs=len(self.txs), total_coins=self.total_coins.get(),
-           total_minutes=self.total_minutes.get(), server_id=self.droplet_id.get(), msgs=self.get_msgs(3))
+           total_minutes=self.total_minutes.get(), server_id=self.droplet_id.get(), msgs=self.get_msgs(3),
+           expiry=self.get_expiry().isoformat())
