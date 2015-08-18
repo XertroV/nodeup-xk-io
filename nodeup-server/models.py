@@ -97,6 +97,7 @@ class Account:
         self.droplet_id = SimpleKVPair(db, 'droplet_id:%s' % uid, str)
         self.unconf_minutes = SimpleKVPair(db, 'unconf_mins:%s' % uid, int, default=0)
         self.compile_ts = SimpleKVPair(db, 'compile_ts:%s' % uid, int, default=0)
+        self.destroyed = SimpleKVPair(db, 'destroyed:%s' % uid, bool, default=False)
 
     def create_new_address(self):
         n = n_addresses.incr()
@@ -125,13 +126,9 @@ class Account:
             return datetime.datetime.fromtimestamp(self.creation_ts.get() + self.total_minutes.get() * 60)
 
     def destroy(self):
-        self.total_coins.set(0)
-        self.total_minutes.set(0)
-        self.unconf_minutes.set(0)
-        self.node_created.set(False)
-        self.droplet_id.set('')
-        self.creation_ts.set(0)
-        self.add_msg('Node destroyed.')
+        self.destroyed.set(True)
+        self.add_msg('Node destroyed. Please use a new account.')
+        uid_to_addr[self.uid] = self.address + '-decommissioned'
 
     def pretty_string(self):
         return """Account: {uid}
