@@ -132,6 +132,7 @@ class Account:
 
     def pretty_string(self):
         return """Account: {uid}
+    Name          : {name}
     Address       : {address}
     # txs         : {n_txs}
     Total Coins   : {total_coins}
@@ -145,4 +146,5 @@ class Account:
 
 """.format(uid=self.uid, address=self.address, n_txs=len(self.txs), total_coins=self.total_coins.get(),
            total_minutes=self.total_minutes.get(), server_id=self.droplet_id.get(), msgs=self.get_msgs(3),
-           expiry=self.get_expiry().isoformat(), server_ip=droplet_ips[self.droplet_id.get()])
+           expiry=self.get_expiry().isoformat(), server_ip=droplet_ips[self.droplet_id.get()],
+           name=self.name.get())

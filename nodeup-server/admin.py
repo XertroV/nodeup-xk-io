@@ -24,6 +24,7 @@ parser.add_argument('--show-all-active-nodes', help='provide a summary of all ac
 parser.add_argument('--show-last-n-msgs', type=int, default=0, help='Show last n msgs (global)')
 parser.add_argument('--msg-user-uid', type=str, default='', help='Specify UID to msg (use with --msg-content)')
 parser.add_argument('--msg-content', type=str, default='', help='Specify msg content (use with --msg-user-uid)')
+parser.add_argument('--server-owner', type=str, default='', help='Get owner of this droplet ID')
 args = parser.parse_args()
 
 if args.ssh_management_key != '':
@@ -74,3 +75,11 @@ if args.show_last_n_msgs != 0:
 if args.msg_user_uid != '' and args.msg_content != '':
     account = Account(process_uid(args.msg_user_uid))
     account.add_msg(args.msg_content)
+
+# if args.set_uid_total_minutes_to_zero != '':
+#     account = Account(process_uid(args.set_uid_total_minutes_to_zero))
+#
+
+if args.server_owner != '':
+    account = Account(droplet_to_uid[args.server_owner])
+    print(account.pretty_string())
