@@ -22,6 +22,8 @@ parser.add_argument('--create-startup-script', help='create a new startup script
 parser.add_argument('--show-account', help='provide uid get account deets', type=str, default='')
 parser.add_argument('--show-all-active-nodes', help='provide a summary of all active nodes', action='store_true')
 parser.add_argument('--show-last-n-msgs', type=int, default=0, help='Show last n msgs (global)')
+parser.add_argument('--msg-user-uid', type=str, default='', help='Specify UID to msg (use with --msg-content)')
+parser.add_argument('--msg-content', type=str, default='', help='Specify msg content (use with --msg-user-uid)')
 args = parser.parse_args()
 
 if args.ssh_management_key != '':
@@ -68,3 +70,7 @@ if args.show_last_n_msgs != 0:
     n = args.show_last_n_msgs
     for msg in all_msgs[:n]:
         print(msg)
+
+if args.msg_user_uid != '' and args.msg_content != '':
+    account = Account(process_uid(args.msg_user_uid))
+    account.add_msg(args.msg_content)
