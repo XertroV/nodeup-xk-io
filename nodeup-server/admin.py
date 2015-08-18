@@ -1,7 +1,9 @@
+#!/usr/bin/env python3
+
 import argparse
 import logging
 
-from models import ssh_management_key, vultr_api_key, xpub, Account, nodes_recently_updated, db, ssh_auditor_key, droplets_to_configure
+from models import ssh_management_key, vultr_api_key, xpub, Account, nodes_recently_updated, db, ssh_auditor_key, droplets_to_configure, active_servers, droplet_to_uid
 from handlers import process_uid
 from constants import MIN_TIME
 from monitor_nodes import process_next_creation, configure_droplet
@@ -18,6 +20,7 @@ parser.add_argument('--msgs-for-uid', help='provide uid get msgs', type=str, def
 parser.add_argument('--configure-droplet', help='Provide ID of droplet to be configured', type=str, default='')
 parser.add_argument('--create-startup-script', help='create a new startup script for nodes on first boot', default='')
 parser.add_argument('--show-account', help='provide uid get account deets', type=str, default='')
+parser.add_argument('--show-all-active-nodes', help='provide a summary of all active nodes', action='store_true')
 args = parser.parse_args()
 
 if args.ssh_management_key != '':
@@ -52,4 +55,9 @@ if args.create_startup_script != '':
 
 if args.show_account != '':
     account = Account(process_uid(args.show_account))
-    import pdb; pdb.set_trace()
+    print(account.pretty_string())
+
+if args.show_all_active_nodes:
+    for id in active_servers:
+        account = Account(droplet_to_uid[id])
+        print(account.pretty_string())
