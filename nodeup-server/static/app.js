@@ -221,6 +221,9 @@
     app.controller('TabController', ['$http', '$log', '$location', function($http, $log, $location){
         var tabs = this;
 
+        tabs.devNotice = "{}";
+        if ($location.host().substr(0, 3) == "dev"){ tabs.devNotice = "{background: #dd7700;}"; }
+
         var current = 'main';
         $location.hash(current);
 
