@@ -52,6 +52,8 @@
 //            return true;
 //        }
 
+        agent.activeUser = function() { return agent.msgs.length > 0; }
+
         agent.saveField = function(field, data){
             if (field == 'tip') { data = data / 100; }
             $http.post('/api', {method: 'saveField', params: {'field': field, 'value': data, 'uid': agent.uid}})

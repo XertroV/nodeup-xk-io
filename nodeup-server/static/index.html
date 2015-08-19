@@ -53,8 +53,8 @@
         {{ agent.status }}
     </div>
 
-    <h3 ng-show="agent.msgs.length == 0">Pay to create your node!</h3>
-    <div ng-show="agent.msgs.length > 0">
+    <h3 ng-show="!agent.activeUser()">Pay to create your node!</h3>
+    <div ng-show="agent.activeUser()">
         <h4 class="blue">Please email nodeup[at]xk.io if there are issues with server creation, or if you have any feedback.</h4>
         Be sure to bookmark this URL if you would like to return to this page (or enter your email address below).<br>
         You've bought a total of {{ agent.totalMinutesPaid / (30 * 24 * 60) | number:2 }} node-months so far for {{ agent.totalCoinsPaid / 100000 }} mBTC.
@@ -75,7 +75,7 @@
         Vultr is a snazzy VPS provider (and they accept Bitcoin!).
     </p>
 
-    <p ng-show="agent.msgs.length > 0">
+    <p ng-show="agent.activeUser()">
         <strong class="blue">Note</strong>: nodes can be unreliable while synchronising. I'm going to add a bootstrapping mechanism soon that should alleviate the problems.
         In the mean time, don't worry if your node appears unreachable 50% of the time -- it's just busy verifying blocks and not answering new connection requests.
     </p>
