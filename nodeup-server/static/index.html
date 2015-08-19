@@ -19,8 +19,12 @@
 <div class="content center" id='main' ng-controller="UserAgentController as agent" ng-show="tabs.is('main')">
     <h1 class="red">WARNING: Alpha quality software.</h1>
     <h4 class="red">This is currently under active development and unexpected things may occur.</h4>
+
+    <!-- don't know current limit - should build something more general
     <h4 class="blue" ng-show="!agent.nodesAvailable()">Currently there is an issue provisioning new nodes due to account limitations. I'm working on getting this resolved.</h4>
     <h4 class="blue" ng-show="agent.nodesAvailable()">{{ 25 - agent.activeNodes }} nodes available with current VPS provider limits.</h4>
+    -->
+
     <h2 class="h2">{{ agent.renderGreeting() }}, let's create a full node in 10 seconds.</h2>
 
     <div id="summary" class="center">
@@ -49,6 +53,7 @@
 
     <h3 ng-show="agent.msgs.length == 0">Pay to create your node!</h3>
     <div ng-show="agent.msgs.length > 0">
+        <h4 class="blue">Please email nodeup[at]xk.io if there are issues with server creation.</h4>
         Be sure to bookmark this URL if you would like to return to this page (or enter your email address below).<br>
         You've bought a total of {{ agent.totalMinutesPaid / (30 * 24 * 60) | number:2 }} node-months so far for {{ agent.totalCoinsPaid / 100000 }} mBTC.
         <h3>Messages <button class="btn btn-outline h6" ng-click="agent.nMsgs = 999999; agent._updateMsgs()">Show All</button></h3>
