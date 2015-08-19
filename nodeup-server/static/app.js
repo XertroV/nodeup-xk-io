@@ -222,7 +222,7 @@
         var tabs = this;
 
         tabs.devNotice = "{}";
-        if ($location.host().substr(0, 3) == "dev"){ tabs.devNotice = "{background: #dd7700;}"; }
+        if ($location.host().substr(0, 3) == "dev"){ tabs.devNotice = "{background: #77bb99;}"; }
 
         var current = 'main';
         $location.hash(current);
