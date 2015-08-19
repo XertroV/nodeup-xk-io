@@ -75,6 +75,11 @@
         Vultr is a snazzy VPS provider (and they accept Bitcoin!).
     </p>
 
+    <p>
+        Note: nodes can be unreliable while synchronising. I'm going to add a bootstrapping mechanism soon that should alleviate the problems.
+        In the mean time, don't worry if your node appears unreachable 50% of the time -- it's just busy verifying blocks and not answering new connection requests.
+    </p>
+
     <div id="error" class="" ng-show="agent.showError">
         <h4>Error!</h4>
         {{ agent.error }}
