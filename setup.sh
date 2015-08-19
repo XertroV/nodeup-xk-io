@@ -21,4 +21,9 @@ git clone https://github.com/XertroV/bitcoin-python3
 cd bitcoin-python3
 sudo python3 setup.py install
 
-cd $origpwd
+cd $origpwd/systemd_services
+for service in `ls`; do
+    sudo cp $service /etc/systemd/system
+    sudo systemctl enable $service
+    sudo systemctl start $service
+done

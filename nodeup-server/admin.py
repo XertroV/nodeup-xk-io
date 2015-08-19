@@ -3,7 +3,7 @@
 import argparse
 import logging
 
-from models import ssh_management_key, vultr_api_key, xpub, Account, nodes_recently_updated, db, ssh_auditor_key, droplets_to_configure, active_servers, droplet_to_uid, all_msgs
+from models import ssh_management_key, vultr_api_key, xpub, Account, nodes_recently_updated, db, ssh_auditor_key, droplets_to_configure, active_servers, droplet_to_uid, all_msgs, twitter_api_key
 from handlers import process_uid
 from constants import MIN_TIME
 from monitor_nodes import process_next_creation, configure_droplet
@@ -25,6 +25,7 @@ parser.add_argument('--show-last-n-msgs', type=int, default=0, help='Show last n
 parser.add_argument('--msg-user-uid', type=str, default='', help='Specify UID to msg (use with --msg-content)')
 parser.add_argument('--msg-content', type=str, default='', help='Specify msg content (use with --msg-user-uid)')
 parser.add_argument('--server-owner', type=str, default='', help='Get owner of this droplet ID')
+parser.add_argument('--twitter-api-key', type=str, default='', help='Set twitter api key')
 args = parser.parse_args()
 
 if args.ssh_management_key != '':
@@ -83,3 +84,7 @@ if args.msg_user_uid != '' and args.msg_content != '':
 if args.server_owner != '':
     account = Account(droplet_to_uid[args.server_owner])
     print(account.pretty_string())
+
+if args.twitter_api_key != '':
+    twitter_api_key.set(args.twitter_api_key)
+    print(twitter_api_key.get())

@@ -64,6 +64,8 @@ all_addresses = Set(db, 'all_addresses')
 n_addresses = SimpleKVPair(db, 'n_addresses', int)
 xpub = SimpleKVPair(db, 'xpub', str)
 all_msgs = List(db, 'all_msgs')
+tweet_queue = List(db, 'tweet_queue')
+twitter_api_key = SimpleKVPair(db, 'twitter_api_key')
 
 
 # droplet management
