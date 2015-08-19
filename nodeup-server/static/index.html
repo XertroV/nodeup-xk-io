@@ -53,7 +53,7 @@
 
     <h3 ng-show="agent.msgs.length == 0">Pay to create your node!</h3>
     <div ng-show="agent.msgs.length > 0">
-        <h4 class="blue">Please email nodeup[at]xk.io if there are issues with server creation.</h4>
+        <h4 class="blue">Please email nodeup[at]xk.io if there are issues with server creation, or if you have any feedback.</h4>
         Be sure to bookmark this URL if you would like to return to this page (or enter your email address below).<br>
         You've bought a total of {{ agent.totalMinutesPaid / (30 * 24 * 60) | number:2 }} node-months so far for {{ agent.totalCoinsPaid / 100000 }} mBTC.
         <h3>Messages <button class="btn btn-outline h6" ng-click="agent.nMsgs = 999999; agent._updateMsgs()">Show All</button></h3>

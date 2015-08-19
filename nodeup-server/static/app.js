@@ -47,10 +47,10 @@
             return agent.months * (1 + agent.tip / 100.0) * raw_price;
         }
 
-        agent.nodesAvailable = function(){
-            if (agent.activeNodes >= 25) { return false; }
-            return true;
-        }
+//        agent.nodesAvailable = function(){
+//            if (agent.activeNodes >= 25) { return false; }
+//            return true;
+//        }
 
         agent.saveField = function(field, data){
             if (field == 'tip') { data = data / 100; }
