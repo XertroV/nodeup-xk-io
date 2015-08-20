@@ -7,6 +7,7 @@ import tweepy
 
 from models import twitter_access_token, twitter_access_secret, twitter_consumer_secret, twitter_consumer_key, tweet_queue
 
+logging.basicConfig(level=logging.INFO)
 
 def get_api():
     auth = tweepy.OAuthHandler(twitter_consumer_key.get(), twitter_consumer_secret.get())
@@ -20,6 +21,7 @@ if __name__ == "__main__":
         if len(tweet_queue) > 0:
             tweet = tweet_queue.popleft().decode()
             try:
+                logging.info('Tweeting %s' % repr(tweet))
                 api.update_status(status=tweet)
             except Exception as e:
                 tweet_queue.prepend(tweet)
