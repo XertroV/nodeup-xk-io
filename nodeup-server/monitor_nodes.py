@@ -39,7 +39,7 @@ def process_next_creation():
             account.add_msg('Node creation failed! A minimum of %d minutes need to be purchased at a time. You need %d more minutes.' % (MIN_TIME, MIN_TIME - account.unconf_minutes.get()))
             return
         if account.destroyed.get():
-            account.add_msg('Node creation failed as it has already been destroyed, please use a new account and contact Max to get your coins back.')
+            account.add_msg('Node creation failed as it has already been destroyed, please use a new account and contact nodeup@xk.io to get your coins back.')
             return
         account.add_msg('Creating server now. ETA 10-20 minutes.')
         dcid = random.choice([1, 5, 7])  # NJ, LA, Amsterdam
