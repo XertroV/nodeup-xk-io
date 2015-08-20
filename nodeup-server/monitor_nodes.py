@@ -56,7 +56,7 @@ def process_next_creation():
             droplet_to_uid[subid] = account.uid
             active_servers.add(subid)
             account.add_msg('Server created successfully! Server ID %s' % (account.droplet_id.get(),))
-            tweet_queue.append('Another nodeup.xk.io node being brought online for %.2f months! %.2f months paid for site-wide.' % (account.unconf_minutes.get() / MINUTES_IN_MONTH, total_nodeminutes.get() / MINUTES_IN_MONTH))
+            tweet_queue.append('Another %s node being brought online for %.2f months! %.2f months provided site-wide.' % (account.client.get(), account.unconf_minutes.get() / MINUTES_IN_MONTH, total_nodeminutes.get() / MINUTES_IN_MONTH))
         else:
             logging.error('Server creation failed! Status %d' % res.status_code)
             logging.error(res.content)
