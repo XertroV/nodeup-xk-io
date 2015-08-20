@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 
 import time
+import logging
 
 import tweepy
 
@@ -15,5 +16,10 @@ if __name__ == "__main__":
     while True:
         if len(tweet_queue) > 0:
             tweet = tweet_queue.popleft().decode()
-            api.update_status(tweet)
+            try:
+                api.update_status(tweet)
+            except Exception as e:
+                tweet_queue.prepend(tweet)
+                logging.error('Tweet failed: %s' % repr(e))
+                raise e
         time.sleep(1)
