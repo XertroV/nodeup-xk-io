@@ -3,7 +3,7 @@ origpwd=`pwd`
 
 sudo apt-get -y install python3-setuptools tcl8.5 build-essential
 sudo easy_install3 pip
-sudo pip3 install tornado simplejson blockchain walrus pycoin paramiko python-digitalocean
+sudo pip3 install tweepy tornado simplejson blockchain walrus pycoin paramiko python-digitalocean
 
 cd ~
 mkdir -p src

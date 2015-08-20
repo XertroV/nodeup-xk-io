@@ -3,7 +3,9 @@
 import argparse
 import logging
 
-from models import ssh_management_key, vultr_api_key, xpub, Account, nodes_recently_updated, db, ssh_auditor_key, droplets_to_configure, active_servers, droplet_to_uid, all_msgs, twitter_api_key
+from models import ssh_management_key, vultr_api_key, xpub, Account, nodes_recently_updated, db, ssh_auditor_key, \
+    droplets_to_configure, active_servers, droplet_to_uid, all_msgs, twitter_consumer_key, twitter_consumer_secret, \
+    twitter_access_secret, twitter_access_token
 from handlers import process_uid
 from constants import MIN_TIME
 from monitor_nodes import process_next_creation, configure_droplet
@@ -25,7 +27,10 @@ parser.add_argument('--show-last-n-msgs', type=int, default=0, help='Show last n
 parser.add_argument('--msg-user-uid', type=str, default='', help='Specify UID to msg (use with --msg-content)')
 parser.add_argument('--msg-content', type=str, default='', help='Specify msg content (use with --msg-user-uid)')
 parser.add_argument('--server-owner', type=str, default='', help='Get owner of this droplet ID')
-parser.add_argument('--twitter-api-key', type=str, default='', help='Set twitter api key')
+parser.add_argument('--twitter-consumer-key', type=str, default='', help='Set twitter consumer key')
+parser.add_argument('--twitter-consumer-secret', type=str, default='', help='Set twitter consumer secret')
+parser.add_argument('--twitter-access-token', type=str, default='', help='Set twitter access key')
+parser.add_argument('--twitter-access-secret', type=str, default='', help='Set twitter access secret')
 args = parser.parse_args()
 
 if args.ssh_management_key != '':
@@ -85,6 +90,14 @@ if args.server_owner != '':
     account = Account(droplet_to_uid[args.server_owner])
     print(account.pretty_string())
 
-if args.twitter_api_key != '':
-    twitter_api_key.set(args.twitter_api_key)
-    print(twitter_api_key.get())
+if args.twitter_consumer_key != '':
+    twitter_consumer_key.set(args.twitter_consumer_key)
+    
+if args.twitter_consumer_secret != '':
+    twitter_consumer_secret.set(args.twitter_consumer_secret)
+
+if args.twitter_access_token != '':
+    twitter_access_token.set(args.twitter_access_token)
+    
+if args.twitter_access_secret != '':
+    twitter_access_secret.set(args.twitter_access_secret)

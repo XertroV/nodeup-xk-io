@@ -1,0 +1,15 @@
+[Unit]
+Description=NodeUp tweet service
+After=network.target nodeup-server.service
+Requires=nodeup-server.service
+
+[Service]
+Type=simple
+ExecStart=/home/user/prod/nodeup-xk-io/nodeup-server/tweeter.py
+WorkingDirectory=/home/user/prod/nodeup-xk-io/nodeup-server/
+Restart=always
+RestartSec=1s
+User=user
+
+[Install]
+WantedBy=multi-user.target
