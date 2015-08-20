@@ -13,7 +13,7 @@ import requests
 
 from models import currently_compiling, Account, nodes_recently_updated, ssh_management_key, vultr_api_key, droplet_to_uid, droplets_to_configure, droplet_ips, nodes_currently_syncing, active_servers, tweet_queue, total_nodeminutes
 from constants import REQUIRED_CONFIRMATIONS, COIN, MIN_TIME, MINUTES_IN_MONTH
-from digitalocean_custom import calc_node_minutes, regions, droplet_creation_json, create_headers
+from digitalocean_custom import calc_node_minutes, regions, droplet_creation_json, create_headers, actually_charge
 
 logging.basicConfig(level=logging.INFO)
 
@@ -56,7 +56,7 @@ def process_next_creation():
             droplet_to_uid[subid] = account.uid
             active_servers.add(subid)
             account.add_msg('Server created successfully! Server ID %s' % (account.droplet_id.get(),))
-            tweet_queue.append('Another %s node being brought online for %.2f months! %.2f months provided site-wide.' % (account.client.get(), account.unconf_minutes.get() / MINUTES_IN_MONTH, total_nodeminutes.get() / MINUTES_IN_MONTH))
+            account.tweet_creation()
         else:
             logging.error('Server creation failed! Status %d' % res.status_code)
             logging.error(res.content)

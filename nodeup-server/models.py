@@ -10,7 +10,10 @@ from walrus.database import Hash, List, Set, ZSet, Database
 
 from bitcoinrpc import connect_to_local
 
+from constants import MINUTES_IN_MONTH
+
 db = Database()
+
 
 class SimpleKVPair:
     def __init__(self, db, key, type, default=None):
@@ -45,7 +48,8 @@ class SimpleKVPair:
         return self.db.incr(self.key, n)
 
 
-exchange_rate = SimpleKVPair(db, 'site:exchange_rate', float, default=1.0)  # USD/BTC - divide to turn dollars into bitcoin
+exchange_rate = SimpleKVPair(db, 'site:exchange_rate', float,
+                             default=1.0)  # USD/BTC - divide to turn dollars into bitcoin
 node_accounts = Set(db, 'nodes_set')
 total_nodeminutes = SimpleKVPair(db, 'stats:nodeminutes', int, default=0)
 unused_addresses = List(db, 'unused_addresses')
@@ -80,6 +84,7 @@ droplet_ips = Hash(db, 'droplet_ips')
 currently_compiling = Set(db, 'currently_compiling')
 nodes_currently_syncing = Set(db, 'currently_syncing')
 active_servers = Set(db, 'active_servers')
+
 
 class Account:
     def __init__(self, uid):
@@ -117,6 +122,9 @@ class Account:
         self.total_minutes.set(0)
         return True
 
+    def get_adjusted_unconf_minutes(self):
+        return self.unconf_minutes.get() / (1 + self.tip.get())
+
     def get_msgs(self, n=10):
         return self.msgs[:n]
 
@@ -135,6 +143,13 @@ class Account:
         self.destroyed.set(True)
         self.add_msg('Node destroyed. Please use a new account.')
         uid_to_addr[self.uid] = self.address + '-decommissioned'
+
+    def tweet_creation(self):
+        tweet_pre = "Another {client} node being brought online for {new_time:.2f} months! {total_time:.2f} months provided site-wide."
+        tweet = tweet_pre.format(client=self.client.get(),
+                                 new_time=(self.get_adjusted_unconf_minutes() / MINUTES_IN_MONTH),
+                                 total_time=(total_nodeminutes.get() / MINUTES_IN_MONTH))
+        tweet_queue.append(tweet)
 
     def pretty_string(self):
         return """Account: {uid}
