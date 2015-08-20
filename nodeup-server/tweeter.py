@@ -20,6 +20,6 @@ if __name__ == "__main__":
                 api.update_status(tweet)
             except Exception as e:
                 tweet_queue.prepend(tweet)
-                logging.error('Tweet failed: %s' % repr(e))
+                logging.error('Tweet failed: %s gave error %s' % (tweet, repr(e)))
                 raise e
         time.sleep(1)
