@@ -131,10 +131,23 @@
 
 <div id='about' class="content" ng-show="tabs.is('about')">
     <h2>About</h2>
+
+    <p>This was a little weekend project for me that I created leading up to <a href="http://www.bitcoinnodeday.org/">Bitcoin Node Day</a>.
+    It was also designed to allow 'slactivism' in the block-size debate -- the idea being that a user could raise an XT node quickly and with minimal effort.</p>
+</div>
+
+<div id='news' class="content" ng-show="tabs.is('news')">
+    <h2>News</h2>
+
+    <hr>
+    <p>2015/08/21 - Adding news and <a href="https://twitter.com/nodeup_alerts">tweet alerts</a>!</p>
 </div>
 
 <div id="footer" class="footer">
-    <a ng-click="tabs.set('main')">Main</a> | <a ng-click="tabs.set('about')">About</a> | By <a href="//xk.io" target="_blank">Max Kaye</a>
+    <button class="btn btn-outline" ng-click="tabs.set('main')">Main</button>
+    | <button ng-click="tabs.set('about')">About</button>
+    | <button ng-click="tabs.set('news')">News</button>
+    | By <a href="//xk.io" target="_blank">Max Kaye</a>
 </div>
 
 </div> <!-- /the-whole-page end tag, should be last -->
