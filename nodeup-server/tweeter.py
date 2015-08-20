@@ -22,7 +22,6 @@ if __name__ == "__main__":
             tweet = tweet_queue.popleft().decode()
             try:
                 logging.info('Tweeting %s' % repr(tweet))
-                logging.info(str(type(tweet)))
                 api.update_status(status=tweet)
             except Exception as e:
                 tweet_queue.prepend(tweet)
