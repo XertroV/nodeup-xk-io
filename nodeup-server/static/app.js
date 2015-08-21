@@ -17,6 +17,7 @@
         agent.totalCoinsPaid = 0;
         agent.activeNodes = 0;
         agent.isCompiling = false;  // ephemeral setting to prevent double clicking recompile button
+        agent.nodeCreationIssues = false;
 
         agent.tip = 10;
         agent.exchangeRate = 100000000000;
@@ -48,10 +49,9 @@
             return agent.months * (1 + agent.tip / 100.0) * raw_price;
         }
 
-//        agent.nodesAvailable = function(){
-//            if (agent.activeNodes >= 25) { return false; }
-//            return true;
-//        }
+        agent.nodesAvailable = function(){
+            return agent.nodeCreationIssues;
+        }
 
         agent.activeUser = function() { return agent.msgs.length > 0; }
 
@@ -98,6 +98,7 @@
                     agent.totalMinutesPaid = data['totalMinutesPaid'];
                     agent.totalCoinsPaid = data['totalCoinsPaid'];
                     agent.activeNodes = data['activeNodes'];
+                    agent.nodeCreationIssues = data['nodeCreationIssues'];
                     $log.log(data);
                 }).error($log.log);
             setTimeout(agent.loadStats, 60 * 1000); // update once a min

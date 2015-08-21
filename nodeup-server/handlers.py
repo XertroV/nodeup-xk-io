@@ -4,7 +4,7 @@ import os
 import hashlib
 import simplejson as json
 
-from models import node_accounts, total_nodeminutes, db, Account, exchange_rate, droplets_to_configure, active_servers
+from models import node_accounts, total_nodeminutes, db, Account, exchange_rate, droplets_to_configure, active_servers, node_creation_issues
 from digitalocean_custom import actually_charge
 from constants import NODE_DETAILS_EMAIL
 
@@ -65,6 +65,7 @@ def handle(method, **params):
         response['totalCoinsPaid'] = account.total_coins.get()
         response['exchangeRate'] = exchange_rate.get()
         response['activeNodes'] = len(active_servers)
+        response['nodeCreationIssues'] = node_creation_issues.get()
 
     elif method == 'recompile':
         if account.node_created.get():

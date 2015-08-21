@@ -11,13 +11,15 @@ import socket
 from paramiko.client import SSHClient, AutoAddPolicy, HostKeys
 import requests
 
-from models import currently_compiling, Account, nodes_recently_updated, ssh_management_key, vultr_api_key, droplet_to_uid, droplets_to_configure, droplet_ips, nodes_currently_syncing, active_servers, tweet_queue, total_nodeminutes
+from models import currently_compiling, Account, nodes_recently_updated, ssh_management_key, vultr_api_key, droplet_to_uid, droplets_to_configure, droplet_ips, nodes_currently_syncing, active_servers, tweet_queue, total_nodeminutes, node_creation_issues
 from constants import REQUIRED_CONFIRMATIONS, COIN, MIN_TIME, MINUTES_IN_MONTH
 from digitalocean_custom import calc_node_minutes, regions, droplet_creation_json, create_headers, actually_charge
 
 logging.basicConfig(level=logging.INFO)
 
 headers = create_headers(vultr_api_key.get())
+
+NODE_CREATION_LIMIT_MSG = b'Server add failed: You have reached the maximum number of active virtual machines for this account. For security reasons, please contact our support team to have the limit raised'
 
 
 def ssh(hostname, username, password, cmd):
@@ -57,8 +59,11 @@ def process_next_creation():
             active_servers.add(subid)
             account.add_msg('Server created successfully! Server ID %s' % (account.droplet_id.get(),))
             account.tweet_creation()
+            node_creation_issues.set(False)
         else:
             logging.error('Server creation failed! Status %d' % res.status_code)
+            if res.status_code == 412 and res.content == NODE_CREATION_LIMIT_MSG:
+                node_creation_issues.set(True)
             logging.error(res.content)
             nodes_recently_updated.append(next_uid)
             account.add_msg('Server creation failed... will keep retrying')
