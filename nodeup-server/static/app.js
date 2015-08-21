@@ -49,10 +49,6 @@
             return agent.months * (1 + agent.tip / 100.0) * raw_price;
         }
 
-        agent.nodesAvailable = function(){
-            return agent.nodeCreationIssues;
-        }
-
         agent.activeUser = function() { return agent.msgs.length > 0; }
 
         agent.saveField = function(field, data){

@@ -29,7 +29,7 @@
     <div  ng-show="tabs.is('main')">
         <h3 class="red">WARNING: Alpha quality software.</h3>
         <h4 class="red">This is currently under active development and unexpected things may occur.</h4>
-        <h4 class="blue" ng-show="!agent.nodesAvailable()">Currently there is an issue provisioning new nodes due to account limitations. I'm working on getting this resolved.</h4>
+        <h4 class="blue" ng-show="agent.nodeCreationIssues">Currently there is an issue provisioning new nodes due to account limitations. I'm working on getting this resolved.</h4>
 
         <!-- don't know current limit - should build something more general
         <h4 class="blue" ng-show="!agent.nodesAvailable()">Currently there is an issue provisioning new nodes due to account limitations. I'm working on getting this resolved.</h4>
