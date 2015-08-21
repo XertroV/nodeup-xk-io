@@ -68,6 +68,7 @@ all_addresses = Set(db, 'all_addresses')
 n_addresses = SimpleKVPair(db, 'n_addresses', int)
 xpub = SimpleKVPair(db, 'xpub', str)
 all_msgs = List(db, 'all_msgs')
+n_tweets = SimpleKVPair(db, 'n_tweets', int)
 tweet_queue = List(db, 'tweet_queue')
 twitter_consumer_key = SimpleKVPair(db, 'twitter_consumer_key', str)
 twitter_consumer_secret = SimpleKVPair(db, 'twitter_consumer_secret', str)
@@ -147,10 +148,11 @@ class Account:
         uid_to_addr[self.uid] = self.address + '-decommissioned'
 
     def tweet_creation(self):
-        tweet_pre = "Another {client} node being brought online for {new_time:.2f} months! {total_time:.2f} months provided site-wide."
+        tweet_pre = "Another {client} node started for {new_time:.2f} months! {total_time:.2f} months total provided by nodeup.xk.io. n={n}"
         tweet = tweet_pre.format(client=self.client.get(),
                                  new_time=(self.get_adjusted_unconf_minutes() / MINUTES_IN_MONTH),
-                                 total_time=(total_nodeminutes.get() / MINUTES_IN_MONTH))
+                                 total_time=(total_nodeminutes.get() / MINUTES_IN_MONTH),
+                                 n=n_tweets.incr())
         tweet_queue.append(tweet)
 
     def email_node_up(self, ip):
