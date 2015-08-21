@@ -5,7 +5,7 @@ import logging
 
 from models import ssh_management_key, vultr_api_key, xpub, Account, nodes_recently_updated, db, ssh_auditor_key, \
     droplets_to_configure, active_servers, droplet_to_uid, all_msgs, twitter_consumer_key, twitter_consumer_secret, \
-    twitter_access_secret, twitter_access_token
+    twitter_access_secret, twitter_access_token, mandrill_username, mandrill_api_key
 from handlers import process_uid
 from constants import MIN_TIME
 from monitor_nodes import process_next_creation, configure_droplet
@@ -31,6 +31,8 @@ parser.add_argument('--twitter-consumer-key', type=str, default='', help='Set tw
 parser.add_argument('--twitter-consumer-secret', type=str, default='', help='Set twitter consumer secret')
 parser.add_argument('--twitter-access-token', type=str, default='', help='Set twitter access key')
 parser.add_argument('--twitter-access-secret', type=str, default='', help='Set twitter access secret')
+parser.add_argument('--mandrill-username', type=str, default='', help='Set mandrill username')
+parser.add_argument('--mandrill-api-key', type=str, default='', help='Set mandrill api key')
 args = parser.parse_args()
 
 if args.ssh_management_key != '':
@@ -101,3 +103,9 @@ if args.twitter_access_token != '':
     
 if args.twitter_access_secret != '':
     twitter_access_secret.set(args.twitter_access_secret)
+
+if args.mandrill_username != '':
+    mandrill_username.set(args.mandrill_username)
+
+if args.mandrill_api_key != '':
+    mandrill_api_key.set(args.mandrill_api_key)
