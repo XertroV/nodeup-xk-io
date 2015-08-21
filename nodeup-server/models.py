@@ -10,7 +10,7 @@ from walrus.database import Hash, List, Set, ZSet, Database
 
 from bitcoinrpc import connect_to_local
 
-from constants import MINUTES_IN_MONTH
+from constants import MINUTES_IN_MONTH, NODE_UP_EMAIL
 
 db = Database()
 
@@ -152,6 +152,9 @@ class Account:
                                  new_time=(self.get_adjusted_unconf_minutes() / MINUTES_IN_MONTH),
                                  total_time=(total_nodeminutes.get() / MINUTES_IN_MONTH))
         tweet_queue.append(tweet)
+
+    def email_node_up(self, ip):
+        self.email_user('Your New Node Is Online!', NODE_UP_EMAIL.format(ip=ip))
 
     def email_user(self, subject, body):
         if self.email.get() != '' and self.email_notify.get():

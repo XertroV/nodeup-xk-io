@@ -110,6 +110,7 @@ def check_compiling_node(id):
         return
     s.close()
     account.add_msg('Node detected! Check at https://getaddr.bitnodes.io/nodes/%s-%d/' % (ip, 8333))
+    account.email_node_up(ip)
     logging.info('Detected node %s' % id)
     currently_compiling.remove(id)
     nodes_currently_syncing.add(id)
