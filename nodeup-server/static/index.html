@@ -14,123 +14,149 @@
 </head>
 <body ng-controller="TabController as tabs" class="center">
 
+<div id="header" class="m2">
+    <button class="btn btn-outline" ng-click="tabs.set('main')">Main</button>
+    | <button class="btn btn-outline" ng-click="tabs.set('advanced')">Advanced</button>
+    | <button class="btn btn-outline" ng-click="tabs.set('about')">About</button>
+    | <button class="btn btn-outline" ng-click="tabs.set('news')">News</button>
+</div>
+
 <div id="the-whole-page" ng-style="tabs.devNotice">
 
 <a href="https://github.com/XertroV/nodeup-xk-io"><img style="position: absolute; top: 0; left: 0; border: 0;" src="https://camo.githubusercontent.com/c6625ac1f3ee0a12250227cf83ce904423abf351/68747470733a2f2f73332e616d617a6f6e6177732e636f6d2f6769746875622f726962626f6e732f666f726b6d655f6c6566745f677261795f3664366436642e706e67" alt="Fork me on GitHub" data-canonical-src="https://s3.amazonaws.com/github/ribbons/forkme_left_gray_6d6d6d.png"></a>
 
-<div class="content center" id='main' ng-controller="UserAgentController as agent" ng-show="tabs.is('main')">
-    <h1 class="red">WARNING: Alpha quality software.</h1>
-    <h4 class="red">This is currently under active development and unexpected things may occur.</h4>
+<div class="content center" ng-controller="UserAgentController as agent">
+    <div  ng-show="tabs.is('main')">
+        <h3 class="red">WARNING: Alpha quality software.</h3>
+        <h4 class="red">This is currently under active development and unexpected things may occur.</h4>
 
-    <!-- don't know current limit - should build something more general
-    <h4 class="blue" ng-show="!agent.nodesAvailable()">Currently there is an issue provisioning new nodes due to account limitations. I'm working on getting this resolved.</h4>
-    <h4 class="blue" ng-show="agent.nodesAvailable()">{{ 25 - agent.activeNodes }} nodes available with current VPS provider limits.</h4>
-    -->
+        <!-- don't know current limit - should build something more general
+        <h4 class="blue" ng-show="!agent.nodesAvailable()">Currently there is an issue provisioning new nodes due to account limitations. I'm working on getting this resolved.</h4>
+        <h4 class="blue" ng-show="agent.nodesAvailable()">{{ 25 - agent.activeNodes }} nodes available with current VPS provider limits.</h4>
+        -->
 
-    <h2 class="h2">{{ agent.renderGreeting() }}, let's create a full node in 10 seconds.</h2>
+        <h2 class="h2">{{ agent.renderGreeting() }}, let's create a full node in 10 seconds.</h2>
 
-    <div id="summary" class="center">
-            <form class="">
-                Launch a
-                <select id="clientInput" class="field" ng-change="agent.alertModified('client')" ng-model="agent.client">
-                    <option ng-repeat="c in agent.clients track by $index">{{ c }}</option>
-                </select>
-                node
-                for
-                <button ng-click="agent.monthsDown()" class="btn btn-outline rounded-left">-</button>
-                <button disabled="true" class="btn btn-outline border-left not-rounded">{{ agent.months }}</button>
-                <button ng-click="agent.monthsUp()" class="btn btn-outline border-left rounded-right">+</button>
-                month(s)
-                <br>
-                for {{ agent.price() | currency:"$" }} USD or {{ agent.price() * 1000 / agent.exchangeRate | currency:"":4 }} mBTC.
+        <div id="summary" class="center">
+                <form class="">
+                    Launch a
+                    <select id="clientInput" class="field" ng-change="agent.alertModified('client')" ng-model="agent.client">
+                        <option ng-repeat="c in agent.clients track by $index">{{ c }}</option>
+                    </select>
+                    node
+                    for
+                    <button ng-click="agent.monthsDown()" class="btn btn-outline rounded-left">-</button>
+                    <button disabled="true" class="btn btn-outline border-left not-rounded">{{ agent.months }}</button>
+                    <button ng-click="agent.monthsUp()" class="btn btn-outline border-left rounded-right">+</button>
+                    month(s)
+                    <br>
+                    for {{ agent.price() | currency:"$" }} USD or {{ agent.price() * 1000 / agent.exchangeRate | currency:"":4 }} mBTC.
+                </form>
+        </div>
+
+
+        <div id="paymentWrapper" class="center inline-block">
+            <a href="{{ agent._paymentURI }}"><div class="paymentImg" id="paymentQR" ng-show="agent._paymentVisible"></div></a>
+            <div class="paymentImg" id="paymentSpinner" ng-show="!agent._paymentVisible"></div>
+            {{ agent.status }}
+        </div>
+
+        <h3 ng-show="!agent.activeUser()">Pay to create your node!</h3>
+        <div ng-show="agent.activeUser()">
+            <h4 class="blue">Please email nodeup[at]xk.io if there are issues with server creation, or if you have any feedback.</h4>
+            Be sure to bookmark this URL if you would like to return to this page (or enter your email address below).<br>
+            You've bought a total of {{ agent.totalMinutesPaid / (30 * 24 * 60) | number:2 }} node-months so far for {{ agent.totalCoinsPaid / 100000 }} mBTC.
+            <h3>Messages <button class="btn btn-outline h6" ng-click="agent.nMsgs = 999999; agent._updateMsgs()">Show All</button></h3>
+            <hr>
+                <ul>
+                    <li class="left-align" ng-repeat="m in agent.msgs track by $index">{{ m }}</li>
+                </ul>
+            <hr>
+        </div>
+
+        <p>
+            When a transaction is detected, a vultr.com VPS will be created on your behalf and have your chosen version of Bitcoin
+            installed. It will then stay online for as much time as has been paid for. You can top-up your node at any time for any
+            amount (though a minimum of 14 days are required to create a node). In case you're wondering, this is what it looks like
+            after the node comes online: <a href="https://i.imgur.com/z7gxsDJ.png">https://i.imgur.com/z7gxsDJ.png</a>.<br>
+            If you'd like to support the running of this service, you can use this <a href="http://www.vultr.com/?ref=6844985">vultr referral link</a>.
+            Vultr is a snazzy VPS provider (and they accept Bitcoin!).
+        </p>
+
+        <p ng-show="agent.activeUser()">
+            <strong class="blue">Note</strong>: nodes can be unreliable while synchronising. I'm going to add a bootstrapping mechanism soon that should alleviate the problems.
+            In the mean time, don't worry if your node appears unreachable 50% of the time -- it's just busy verifying blocks and not answering new connection requests.
+        </p>
+
+        <div id="error" class="" ng-show="agent.showError">
+            <h4>Error!</h4>
+            {{ agent.error }}
+        </div>
+
+        <h2>{{ agent.nodeMinutes / (30 * 24 * 60) | number:2 }} node-months paid for site-wide and {{ agent.activeNodes }} active nodes.</h2>
+    </div>
+
+
+    <div ng-show="tabs.is('advanced')">
+        <div id="advanced">
+            <h2 class="">Advanced</h2>
+            <hr>
+            All changes are saved automatically. (refresh to check)
+            <br><br>
+            <form class="left-align">
+                <p>
+                    <label for="nameInput">First Name: (optional)</label><br>
+                    <input type="text" id="nameInput" ng-model="agent.firstName" class="field inline-block" ng-change="agent.alertModified('name')">
+                    <br>
+                    If you choose to provide a first name it will be compiled into <code>bitcoind</code> and visible through the version string (e.g. <code>/Bitcoin XT:0.11.0/[NodeUp.xk.io] Gavin's Node</code>). For practical reasons this is limited to 140 characters. If the node has already been compiled you will need to hit the 'recompile' button for this change to work.
+
+                </p>
+
+                <hr>
+
+                <p>
+                    <label for="tipInput">Tip (%):</label>
+                    <input id="tipInput" type="number" value="10" max="1000" min="0" step="1" class="field inline-block" ng-model="agent.tip" ng-change="agent.alertModified('tip')">
+                </p>
+
+                <hr>
+
+                <p>
+                    <h4>Email Features Currently Unimplemented</h4>
+                    <div class="clearfix">
+                        <div class="col col-6">
+                            <label for="emailInput">Email (optional):</label>
+                            <input id="emailInput" type="text" class="field inline-block" placeholder="email@example.com" ng-model="agent.email" ng-change="agent.alertModified('email')">
+                            <br>
+                            <label for="emailNotify">Notify of node events:</label>
+                            <input type="checkbox" id="emailNotify" class="field inline-block" ng-model="agent.emailNotify" ng-change="agent.alertModified('emailNotify')">
+                            <br>
+                            <button class="btn btn-outline" ng-click="agent.sendNodeDetails()">Send Node Details in an Email</button>
+                        </div>
+                        <div class="col col-6">If you choose to leave your email here, you will receive an email at important times, such as your when your node comes online, finishes synchronising with the blockchain, or running out of funds.</div>
+                    </div>
+
+                </p>
+
+                <hr>
+
+                <p>
+                    Testing (not guaranteed to work): <br>
+                    Recompile Node: <button ng-click="agent.recompile()" ng-disabled="agent.isCompiling" class="btn btn-outline">Recompile</button>
+                </p>
+
+                <hr>
+
+                <p class="h6"><button class="btn btn-outline" ng-click="agent.newIdentity()">(new identity - BOOKMARK THIS ONE FIRST)</button></p>
+
             </form>
-    </div>
-
-
-    <div id="paymentWrapper" class="center inline-block">
-        <a href="{{ agent._paymentURI }}"><div class="paymentImg" id="paymentQR" ng-show="agent._paymentVisible"></div></a>
-        <div class="paymentImg" id="paymentSpinner" ng-show="!agent._paymentVisible"></div>
-        {{ agent.status }}
-    </div>
-
-    <h3 ng-show="!agent.activeUser()">Pay to create your node!</h3>
-    <div ng-show="agent.activeUser()">
-        <h4 class="blue">Please email nodeup[at]xk.io if there are issues with server creation, or if you have any feedback.</h4>
-        Be sure to bookmark this URL if you would like to return to this page (or enter your email address below).<br>
-        You've bought a total of {{ agent.totalMinutesPaid / (30 * 24 * 60) | number:2 }} node-months so far for {{ agent.totalCoinsPaid / 100000 }} mBTC.
-        <h3>Messages <button class="btn btn-outline h6" ng-click="agent.nMsgs = 999999; agent._updateMsgs()">Show All</button></h3>
-        <hr>
-            <ul>
-                <li class="left-align" ng-repeat="m in agent.msgs track by $index">{{ m }}</li>
-            </ul>
-        <hr>
-    </div>
-
-    <p>
-        When a transaction is detected, a vultr.com VPS will be created on your behalf and have your chosen version of Bitcoin
-        installed. It will then stay online for as much time as has been paid for. You can top-up your node at any time for any
-        amount (though a minimum of 14 days are required to create a node). In case you're wondering, this is what it looks like
-        after the node comes online: <a href="https://i.imgur.com/z7gxsDJ.png">https://i.imgur.com/z7gxsDJ.png</a>.<br>
-        If you'd like to support the running of this service, you can use this <a href="http://www.vultr.com/?ref=6844985">vultr referral link</a>.
-        Vultr is a snazzy VPS provider (and they accept Bitcoin!).
-    </p>
-
-    <p ng-show="agent.activeUser()">
-        <strong class="blue">Note</strong>: nodes can be unreliable while synchronising. I'm going to add a bootstrapping mechanism soon that should alleviate the problems.
-        In the mean time, don't worry if your node appears unreachable 50% of the time -- it's just busy verifying blocks and not answering new connection requests.
-    </p>
-
-    <div id="error" class="" ng-show="agent.showError">
-        <h4>Error!</h4>
-        {{ agent.error }}
-    </div>
-
-    <h2>{{ agent.nodeMinutes / (30 * 24 * 60) | number:2 }} node-months paid for site-wide and {{ agent.activeNodes }} active nodes.</h2>
-
-    <div id="advanced">
-        <h2 class="">Advanced</h2>
-        <hr>
-        All changes are saved automatically. (refresh to check)
-        <br><br>
-        <form class="center">
-            <p>
-                If you choose to provide a first name it will be compiled into <code>bitcoind</code> and visible through the version string (e.g. <code>/Bitcoin XT:0.11.0/[NodeUp.xk.io] Gavin's Node</code>). For practical reasons this is limited to 140 characters. If the node has already been compiled you will need to hit the 'recompile' button for this change to work.
-                <br><br>
-                <label for="nameInput">First Name: (optional)</label><br>
-                <input type="text" id="nameInput" ng-model="agent.firstName" class="field inline-block" ng-change="agent.alertModified('name')">
-            </p><br>
-
-            <p>
-                <label for="tipInput">Tip (%):</label>
-                <input id="tipInput" type="number" value="10" max="1000" min="0" step="1" class="field inline-block" ng-model="agent.tip" ng-change="agent.alertModified('tip')">
-            </p>
-
-            <p>
-                <h4>Email Features Currently Unimplemented</h4>
-                If you choose to leave your email here, you will receive an email at important times, such as your when your node comes online, finishes synchronising with the blockchain, or running out of funds.
-                <br>
-                <label for="emailInput">Email (optional):</label>
-                <input id="emailInput" type="text" class="field inline-block" placeholder="email@example.com" ng-model="agent.email" ng-change="agent.alertModified('email')">
-                <br>
-                <button class="btn btn-outline" ng-click="agent.sendNodeDetails()">Send Node Details in an Email</button>
-                <br>
-                <label for="emailNotify">Notify of node events:</label>
-                <input type="checkbox" id="emailNotify" class="field inline-block" ng-model="agent.emailNotify" ng-change="agent.alertModified('emailNotify')">
-            </p>
-
-            <p>
-                Testing (not guaranteed to work):
-                <button ng-click="agent.recompile()" class="btn btn-outline">Recompile</button>
-            </p>
-
-            <p class="h6"><button class="btn btn-outline" ng-click="agent.newIdentity()">(new identity - BOOKMARK THIS ONE FIRST)</button></p>
-
-        </form>
+        </div>
     </div>
 </div>
 
 <div id='about' class="content" ng-show="tabs.is('about')">
     <h2>About</h2>
+    <hr>
 
     <p>This was a little weekend project for me that I created leading up to <a href="http://www.bitcoinnodeday.org/">Bitcoin Node Day</a>.
     It was also designed to allow 'slactivism' in the block-size debate -- the idea being that a user could raise an XT node quickly and with minimal effort.</p>
@@ -140,14 +166,11 @@
     <h2>News</h2>
 
     <hr>
-    <p>2015/08/21 - Adding news and <a href="https://twitter.com/nodeup_alerts">tweet alerts</a>!</p>
+    <p>2015/08/21 - Adding news and <a href="https://twitter.com/nodeup_alerts">tweet alerts</a>! Also some interface rejiggery.</p>
 </div>
 
-<div id="footer" class="footer">
-    <button class="btn btn-outline" ng-click="tabs.set('main')">Main</button>
-    | <button ng-click="tabs.set('about')">About</button>
-    | <button ng-click="tabs.set('news')">News</button>
-    | By <a href="//xk.io" target="_blank">Max Kaye</a>
+<div id="footer" class="footer m4">
+    By <a href="//xk.io" target="_blank">Max Kaye</a>
 </div>
 
 </div> <!-- /the-whole-page end tag, should be last -->

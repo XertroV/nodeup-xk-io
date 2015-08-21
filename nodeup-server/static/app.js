@@ -16,6 +16,7 @@
         agent.totalMinutesPaid = 0;
         agent.totalCoinsPaid = 0;
         agent.activeNodes = 0;
+        agent.isCompiling = false;  // ephemeral setting to prevent double clicking recompile button
 
         agent.tip = 10;
         agent.exchangeRate = 100000000000;
@@ -104,6 +105,7 @@
         agent.loadStats();
 
         agent.recompile = function(){
+            agent.isCompiling = true;
             $http.post('/api', {method: 'recompile', params:{'uid': agent.uid}})
                 .success(function(data){
                     agent._updateMsgs();
@@ -226,15 +228,15 @@
         tabs.devNotice = "{}";
         if ($location.host().substr(0, 3) == "dev"){ tabs.devNotice = "{background: #77bb99;}"; }
 
-        var current = 'main';
-        $location.hash(current);
+        if ($location.hash() == ''){
+            $location.hash('main');
+        }
 
         tabs.is = function(tabName){
-            return current == tabName;
+            return $location.hash() == tabName;
         };
 
         tabs.set = function(tabName){
-            current = tabName;
             $location.hash(tabName);
         };
     }]);
