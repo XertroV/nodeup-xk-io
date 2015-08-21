@@ -219,6 +219,12 @@
             setTimeout(agent.updateMsgs, timeout);
         }
         agent.updateMsgs();
+
+        agent.sendNodeDetails = function(){
+            $http.post('/api', {'method': 'sendNodeDetails', params: {'uid': agent.uid}})
+                .success(function(data){
+                }).error($log.log);
+        }
     }]);
 
 

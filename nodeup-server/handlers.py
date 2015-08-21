@@ -6,6 +6,7 @@ import simplejson as json
 
 from models import node_accounts, total_nodeminutes, db, Account, exchange_rate, droplets_to_configure, active_servers
 from digitalocean_custom import actually_charge
+from constants import NODE_DETAILS_EMAIL
 
 with open('static/index.html') as f:
     index_file = f.read()
@@ -15,6 +16,7 @@ def process_uid(uid):
 
 def handle(method, **params):
     response = {}
+    real_uid = params['uid']
     uid = process_uid(params['uid'])  # not user chosen any longer
     account = Account(uid)
     fieldMap = {
@@ -71,6 +73,9 @@ def handle(method, **params):
             response['recompile_queued'] = True
         else:
             response['recompile_queued'] = False
+
+    elif method == 'sendNodeDetails':
+        account.email_user('Node Details', NODE_DETAILS_EMAIL.format(uid=real_uid), force=True)
 
     return response
 

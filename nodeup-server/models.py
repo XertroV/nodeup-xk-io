@@ -156,9 +156,10 @@ class Account:
     def email_node_up(self, ip):
         self.email_user('Your New Node Is Online!', NODE_UP_EMAIL.format(ip=ip))
 
-    def email_user(self, subject, body):
-        if self.email.get() != '' and self.email_notify.get():
-            add_email(self.email.get(), subject, body)
+    def email_user(self, subject, body, force=False):
+        if self.email.get() != '':
+            if force or self.email_notify.get():
+                add_email(self.email.get(), subject, body)
 
     def pretty_string(self):
         return """Account: {uid}
