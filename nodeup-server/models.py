@@ -153,6 +153,10 @@ class Account:
                                  total_time=(total_nodeminutes.get() / MINUTES_IN_MONTH))
         tweet_queue.append(tweet)
 
+    def email_user(self, subject, body):
+        if self.email.get() != '' and self.email_notify.get():
+            add_email(self.email.get(), subject, body)
+
     def pretty_string(self):
         return """Account: {uid}
     Name          : {name}
@@ -171,8 +175,6 @@ class Account:
            total_minutes=self.total_minutes.get(), server_id=self.droplet_id.get(), msgs=self.get_msgs(3),
            expiry=self.get_expiry().isoformat(), server_ip=droplet_ips[self.droplet_id.get()],
            name=self.name.get())
-
-
 
 
 def add_email(to, subject, body):
