@@ -28,7 +28,7 @@ date >> $filename
 newp
 bitcoin-cli getinfo >> $filename
 newp
-tail -n 1 ~/.bitcoin/debug.log >> $filename
+tail -n 3 ~/.bitcoin/debug.log >> $filename
 newp
 
 
