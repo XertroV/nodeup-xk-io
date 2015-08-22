@@ -155,7 +155,7 @@ def process_node_creations(stop_at):
     while time.time() < stop_at:
         response = process_next_creation()
         if response == 'CREATION_FAILED':
-            yield from asyncio.sleep(60)
+            yield from asyncio.sleep(300)
         yield from asyncio.sleep(1)
 
 
