@@ -24,6 +24,7 @@ function newp {
 }
 
 newp
+echo "=========" >> $filename
 date >> $filename
 newp
 bitcoin-cli getinfo >> $filename
