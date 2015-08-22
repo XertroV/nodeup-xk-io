@@ -3,6 +3,15 @@
 FIRSTNAME="$1"
 NODE_NAME="$2"
 
+function install-another-script {
+    scriptname=$1
+    origdir=`pwd`
+    wget "https://raw.githubusercontent.com/XertroV/nodeup-xk-io/master/$scriptname"
+    bash "$scriptname"
+    rm "$scriptname"
+    cd "$origdir"
+}
+
 echo "Firstname: $FIRSTNAME"
 echo "Node name: $NODE_NAME"
 
@@ -85,7 +94,7 @@ rm tempcron
 # sed -i '2a\
 #sudo -u bitcoin /usr/local/bin/bitcoind' /etc/rc.local
 
-echo """[Unit]
+echo "[Unit]
 Description=Bitcoind service for a node.
 After=network.target
 
@@ -99,10 +108,12 @@ User=user
 
 [Install]
 WantedBy=multi-user.target
-""" > /etc/systemd/system/bitcoind.service
+" > /etc/systemd/system/bitcoind.service
 systemctl enable bitcoind
 
 echo "############ Add an alias for easy use"
 echo "alias btc=\"sudo -u user bitcoin-cli -datadir=/home/user/.bitcoin\"" >> ~/.bashrc  # example use: btc getinfo
+
+install-another-script "statsInstall.sh"
 
 reboot
