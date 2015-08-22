@@ -190,13 +190,15 @@ def destroy_unpaid_loop(stop_at):
 
 
 if __name__ == '__main__':
-    now = int(time.time())
-    stop_at = now + 60 * 60 * 4  # 4 hours from now
-    asyncio.async(process_node_creations(stop_at))
-    asyncio.async(configure_droplet_loop(stop_at))
-    asyncio.async(check_compiling_loop(stop_at))
-    asyncio.async(destroy_unpaid_loop(stop_at))
-    asyncio.get_event_loop().run_forever()
+    def main():
+        now = int(time.time())
+        stop_at = now + 60 * 60 * 4  # 4 hours from now
+        asyncio.async(process_node_creations(stop_at))
+        asyncio.async(configure_droplet_loop(stop_at))
+        asyncio.async(check_compiling_loop(stop_at))
+        asyncio.async(destroy_unpaid_loop(stop_at))
+        asyncio.get_event_loop().run_forever()
+    main()
 
 
 
