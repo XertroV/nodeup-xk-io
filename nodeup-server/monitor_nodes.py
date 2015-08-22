@@ -197,7 +197,8 @@ if __name__ == '__main__':
         asyncio.async(configure_droplet_loop(stop_at))
         asyncio.async(check_compiling_loop(stop_at))
         asyncio.async(destroy_unpaid_loop(stop_at))
-        asyncio.get_event_loop().run_forever()
+        pending = asyncio.Task.all_tasks()
+        asyncio.get_event_loop().run_until_complete(asyncio.gather(*pending))
     main()
 
 
