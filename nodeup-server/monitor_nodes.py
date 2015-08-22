@@ -45,8 +45,15 @@ def process_next_creation():
             return
         account.add_msg('Creating server now. ETA 10-20 minutes.')
         dcid = random.choice([1, 5, 7])  # NJ, LA, Amsterdam
-        res = requests.post("https://api.vultr.com/v1/server/create?api_key=%s" % vultr_api_key.get(),
-                            data={"DCID": dcid, "VPSPLANID": 87, "OSID": 192, "SSHKEYID": ssh_management_key.get()})
+
+        try:
+            res = requests.post("https://api.vultr.com/v1/server/create?api_key=%s" % vultr_api_key.get(),
+                                data={"DCID": dcid, "VPSPLANID": 87, "OSID": 192, "SSHKEYID": ssh_management_key.get(),
+                                      "label": str(account.uid)})
+        except Exception as e:
+            nodes_recently_updated.prepend(next_uid)
+            logging.error('Attempted to create server / Exception: %s' % repr(e))
+
         if res.status_code == 200:  # accepted
             response = res.json()
             subid = response['SUBID']
