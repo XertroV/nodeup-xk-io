@@ -49,7 +49,8 @@ def process_next_creation():
         try:
             res = requests.post("https://api.vultr.com/v1/server/create?api_key=%s" % vultr_api_key.get(),
                                 data={"DCID": dcid, "VPSPLANID": 87, "OSID": 192, "SSHKEYID": ssh_management_key.get(),
-                                      "label": str(account.uid)})
+                                      "label": str(account.uid), "enable_private_network": 'yes',
+                                      'enable_ipv6 string': 'yes'})
         except Exception as e:
             nodes_recently_updated.prepend(next_uid)
             logging.error('Attempted to create server / Exception: %s' % repr(e))
