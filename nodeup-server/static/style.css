@@ -45,3 +45,7 @@ body {
 .btn-small {
     line-height: 0.25rem;
 }
+
+#twitter-timeline-container {
+    max-width: 520px;
+}
