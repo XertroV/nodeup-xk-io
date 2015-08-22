@@ -151,8 +151,8 @@ def check_server_for_expiration(id):
 
 
 @asyncio.coroutine
-def process_node_creations():
-    while True:
+def process_node_creations(stop_at):
+    while time.time() < stop_at:
         response = process_next_creation()
         if response == 'CREATION_FAILED':
             yield from asyncio.sleep(60)
@@ -160,8 +160,8 @@ def process_node_creations():
 
 
 @asyncio.coroutine
-def configure_droplet_loop():
-    while True:
+def configure_droplet_loop(stop_at):
+    while time.time() < stop_at:
         servers = requests.get('https://api.vultr.com/v1/server/list?api_key=%s' % vultr_api_key.get()).json()
         for droplet_id, ts in droplets_to_configure:
             subid = droplet_id.decode()
@@ -172,8 +172,8 @@ def configure_droplet_loop():
 
 
 @asyncio.coroutine
-def check_compiling_loop():
-    while True:
+def check_compiling_loop(stop_at):
+    while time.time() < stop_at:
         for id in currently_compiling.members():
             check_compiling_node(id)
             yield from asyncio.sleep(1)
@@ -181,8 +181,8 @@ def check_compiling_loop():
 
 
 @asyncio.coroutine
-def destroy_unpaid_loop():
-    while True:
+def destroy_unpaid_loop(stop_at):
+    while time.time() < stop_at:
         for id in active_servers.members():
             check_server_for_expiration(id)
             yield from asyncio.sleep(1)
@@ -190,10 +190,12 @@ def destroy_unpaid_loop():
 
 
 if __name__ == '__main__':
-    asyncio.async(process_node_creations())
-    asyncio.async(configure_droplet_loop())
-    asyncio.async(check_compiling_loop())
-    asyncio.async(destroy_unpaid_loop())
+    now = int(time.time())
+    stop_at = now + 60 * 60 * 4  # 4 hours from now
+    asyncio.async(process_node_creations(stop_at))
+    asyncio.async(configure_droplet_loop(stop_at))
+    asyncio.async(check_compiling_loop(stop_at))
+    asyncio.async(destroy_unpaid_loop(stop_at))
     asyncio.get_event_loop().run_forever()
 
 
