@@ -50,7 +50,7 @@ cd bitcoin
 # Add a market to track how much BitcoinAutoNode is used
 # Insert [B.A.N.] at the end of the client name, probably not compatible with BIP 14 but eh
 #sed -i 's/\(CLIENT_NAME(".*\)\(")\)/\1 \[B.A.N.\]\2/' src/clientversion.cpp
-if [ -z $FIRSTNAME ]; then
+if [ -z "$FIRSTNAME" ]; then
   EXTRA=""
 else
   EXTRA="; $FIRSTNAME's node"  # keep first space
