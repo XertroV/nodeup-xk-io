@@ -44,6 +44,7 @@ elif [ "$NODE_NAME" == "Core w/ BIP101" ]; then
     URL="https://bitbucket.org/bitcartel/bitcoinxt.git"
 fi
 
+rm -rf bitcoin  2>/dev/null # clean up to enable recompile
 git clone "$URL" bitcoin 2>&1
 cd bitcoin
 
@@ -63,7 +64,6 @@ make
 make install
 
 cd ..
-rm -r bitcoin  # clean up to enable recompile
 
 echo "########### Create Bitcoin User"
 useradd -m user
