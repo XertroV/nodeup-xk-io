@@ -117,6 +117,7 @@ def configure_droplet(id, servers=None):
     print(stdout.read(), stderr.read())
     account.add_msg('Started compilation script on server %s -- takes about 30 minutes' % id)
     account.add_msg('Server IP: %s' % ip)
+    logging.info('Configuring server %s' % id)
     account.compile_ts.set(int(time.time()))
     droplets_to_configure.remove(id)
     currently_compiling.add(id)
