@@ -5,7 +5,7 @@ import logging
 
 from models import ssh_management_key, vultr_api_key, xpub, Account, nodes_recently_updated, db, ssh_auditor_key, \
     droplets_to_configure, active_servers, droplet_to_uid, all_msgs, twitter_consumer_key, twitter_consumer_secret, \
-    twitter_access_secret, twitter_access_token, mandrill_username, mandrill_api_key
+    twitter_access_secret, twitter_access_token, mandrill_username, mandrill_api_key, uid_to_addr
 from handlers import process_uid
 from constants import MIN_TIME
 from monitor_nodes import process_next_creation, configure_droplet
@@ -62,8 +62,11 @@ if args.create_startup_script != '':
     raise Exception('Unimplemented')
 
 if args.show_account != '':
-    account = Account(process_uid(args.show_account))
-    print(account.pretty_string())
+    uids = [args.show_account, process_uid(args.show_account)]
+    for uid in uids:
+        if uid in uid_to_addr:
+            account = Account(uid)
+            print(account.pretty_string())
 
 if args.show_all_active_nodes:
     print('%d servers total' % len(active_servers))
