@@ -29,7 +29,7 @@
     <div  ng-show="tabs.is('main')">
         <h3 class="red">WARNING: Alpha quality software.</h3>
         <h4 class="red">This is currently under active development and unexpected things may occur.</h4>
-        <h4 class="blue" ng-show="agent.nodeCreationIssues">Currently there is an issue provisioning new nodes due to account limitations. I'm working on getting this resolved.</h4>
+        <h4 class="blue" ng-show="agent.nodeCreationIssues">Currently there is an issue provisioning new nodes due to account limitations. I'm working on getting this resolved. New nodes will be queued and automatically created when this is resolved.</h4>
 
         <h2 class="h2">{{ agent.renderGreeting() }}, let's create a full node in 10 seconds.</h2>
 
@@ -142,7 +142,7 @@
 
                 <p>
                     <label for="branchInput">Checkout branch: (updating client choice will reset this option)</label>
-                    <input id="branchInput" type="text" class="field inline-block" placeholder="e.g. only-bigblocks" ng-model="agent.branch" ng-change="agent.alertModified('branch')">
+                    <input id="branchInput" type="text" class="field inline-block" placeholder="e.g. 0.11" ng-model="agent.branch" ng-change="agent.alertModified('branch')">
                 </p>
 
                 <hr>
