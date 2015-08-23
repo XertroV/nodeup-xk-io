@@ -199,7 +199,7 @@ def destroy_unpaid_loop(stop_at):
         for id in active_servers.members():
             check_server_for_expiration(id)
             yield from asyncio.sleep(1)
-        yield from asyncio.sleep(60)
+        yield from asyncio.sleep(600)
 
 
 if __name__ == '__main__':
