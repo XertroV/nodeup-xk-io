@@ -19,6 +19,8 @@ function install-another-script {
     cd "$origdir"
 }
 
+systemctl stop bitcoind 2>/dev/null
+
 echo "Firstname: $FIRSTNAME"
 echo "Node name: $NODE_NAME"
 echo "Branch:    $BRANCH"
@@ -65,7 +67,7 @@ elif [ "$NODE_NAME" == "Core w/ BIP101" ]; then
     URL="https://bitbucket.org/bitcartel/bitcoinxt.git"
 fi
 
-rm -rf bitcoin  2>/dev/null # clean up to enable recompile
+rm -rf bitcoin 2>/dev/null # clean up to enable recompile
 git clone "$URL" bitcoin 2>&1
 cd bitcoin
 
