@@ -96,10 +96,10 @@ def configure_droplet(id, servers=None):
     password = droplet['default_password']
     droplet_ips[id] = ip
     # ssh
-    exec = 'curl https://raw.githubusercontent.com/XertroV/nodeup-xk-io/master/nodeInstall.sh  > nodeInstall.sh; bash nodeInstall.sh "%s" "%s" &> ~/installLog &'
+    exec = 'curl https://raw.githubusercontent.com/XertroV/nodeup-xk-io/master/nodeInstall.sh  > nodeInstall.sh; bash nodeInstall.sh "%s" "%s" "%s" "%s" &> ~/installLog &'
     try:
         print('root', password, ip)
-        _, stdout, stderr = ssh(ip, 'root', password, exec % (account.name.get(), account.client.get()))
+        _, stdout, stderr = ssh(ip, 'root', password, exec % (account.name.get(), account.client.get(), account.branch.get(), ''))
     except Exception as e:
         print(e)
         logging.error('could not configure server %s due to %s' % (id, repr(e)))

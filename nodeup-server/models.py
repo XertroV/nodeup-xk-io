@@ -103,6 +103,7 @@ class Account:
         self.txs = Set(db, 'txs_for:%s' % uid)
         self.msgs = List(db, 'msgs:%s' % uid)
         self.client = SimpleKVPair(self.db, 'client:%s' % uid, str, default='Bitcoin XT')
+        self.branch = SimpleKVPair(self.db, 'branch:%s' % uid, str, default='')
         self.tip = SimpleKVPair(self.db, 'tip:%s' % uid, float, default=0.1)
         self.email = SimpleKVPair(self.db, 'email:%s' % uid, str, default='')
         self.email_notify = SimpleKVPair(self.db, 'email_notify:%s' % uid, bool, default=False)

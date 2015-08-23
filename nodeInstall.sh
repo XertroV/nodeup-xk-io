@@ -3,9 +3,10 @@
 FIRSTNAME="$1"
 NODE_NAME="$2"
 BRANCH="$3"
+RSYNC_LOCATION="$4"
 
-if [ "$#" -ne 3 ] ; then
-    echo "USAGE: bash nodeInstall.sh \"FIRSTNAME\" \"CLIENT SELECTION\" \"GIT BRANCH\""
+if [ "$#" -ne 4 ] ; then
+    echo "USAGE: bash nodeInstall.sh \"FIRSTNAME\" \"CLIENT SELECTION\" \"GIT BRANCH\" \"RSYNC LOCATION\""
     exit
 fi
 

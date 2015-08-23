@@ -141,6 +141,13 @@
                 <hr>
 
                 <p>
+                    <label for="branchInput">Checkout branch: (updating client choice will reset this option)</label>
+                    <input id="branchInput" type="text" class="field inline-block" placeholder="e.g. only-bigblocks" ng-model="agent.branch" ng-change="agent.alertModified('branch')">
+                </p>
+
+                <hr>
+
+                <p>
                     Testing (not guaranteed to work): <br>
                     Recompile Node: <button ng-click="agent.recompile()" ng-disabled="agent.isCompiling" class="btn btn-outline">Recompile</button>
                 </p>

@@ -25,6 +25,7 @@ def handle(method, **params):
         'name': account.name,
         'client': account.client,
         'tip': account.tip,
+        'branch': account.branch,
     }
 
     if method == 'getPaymentDetails':
@@ -41,6 +42,7 @@ def handle(method, **params):
         pass
 
     elif method == 'saveField':
+        print(params)
         field = params['field']
         value = params['value']
         if field == 'name' and len(value) > 140:

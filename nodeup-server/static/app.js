@@ -37,8 +37,10 @@
         agent.status = "Waiting for payment...";
         agent.statusSymbol = "spinner";
 
-        agent.clients = ['Bitcoin XT', 'Bitcoin Core', 'Core w/ BIP101'];
+        agent.clients =  ['Bitcoin XT',     'Bitcoin Core',     'Core w/ BIP101'];
+        agent.branches = {'Bitcoin XT': '', 'Bitcoin Core': '', 'Core w/ BIP101': 'only-bigblocks'};
         agent.client = agent.clients[0];
+        agent.branch = '';
 
         agent.months = 1;
         agent.monthsUp = function(){ agent.months += 1; agent.alertModified(); }
@@ -75,8 +77,8 @@
                         agent.tip = value * 100;
                     } else if (field == 'client') {
                         agent.client = value;
-                    } else if (field == 'months') {
-                        agent.email = value;
+                    } else if (field == 'branch') {
+                        agent.branch = value;
                     }
                 })
         }
@@ -85,6 +87,7 @@
         agent.loadField('name');
         agent.loadField('tip');
         agent.loadField('client');
+        agent.loadField('branch');
 
         agent.loadStats = function(){
             $http.post('/api', {method: 'getStats', params: {'uid': agent.uid}})
@@ -165,8 +168,12 @@
                 agent.saveField(field, agent.tip);
             } else if (field == 'client') {
                 agent.saveField(field, agent.client);
+                agent.branch = agent.branches[agent.client];
+                agent.alertModified('branch')
             } else if (field == 'months') {
                 agent.saveField(field, agent.email);
+            } else if (field == 'branch') {
+                agent.saveField(field, agent.branch);
             }
 
             agent.hidePayment();
