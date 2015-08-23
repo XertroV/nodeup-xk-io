@@ -85,6 +85,11 @@ def process_next_creation():
         logging.warning('Account already has a node created.')
 
 
+def create_install_command(name, client, branch='', rsync_location=''):
+    to_run = 'curl https://raw.githubusercontent.com/XertroV/nodeup-xk-io/master/nodeInstall.sh  > nodeInstall.sh; bash nodeInstall.sh "%s" "%s" "%s" "%s" &> ~/installLog &'
+    return to_run % (name, client, branch, rsync_location)
+
+
 def configure_droplet(id, servers=None):
     if servers is None:
         servers = get_servers()
@@ -96,10 +101,9 @@ def configure_droplet(id, servers=None):
     password = droplet['default_password']
     droplet_ips[id] = ip
     # ssh
-    exec = 'curl https://raw.githubusercontent.com/XertroV/nodeup-xk-io/master/nodeInstall.sh  > nodeInstall.sh; bash nodeInstall.sh "%s" "%s" "%s" "%s" &> ~/installLog &'
     try:
         print('root', password, ip)
-        _, stdout, stderr = ssh(ip, 'root', password, exec % (account.name.get(), account.client.get(), account.branch.get(), ''))
+        _, stdout, stderr = ssh(ip, 'root', password, create_install_command(account.name.get(), account.client.get(), account.branch.get(), ''))
     except Exception as e:
         print(e)
         logging.error('could not configure server %s due to %s' % (id, repr(e)))
