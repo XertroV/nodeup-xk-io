@@ -26,6 +26,16 @@ echo "Branch:    $BRANCH"
 echo "########### The server will reboot when the script is complete"
 echo "########### Changing to home dir"
 cd ~
+
+echo "########### Create Bitcoin User"
+useradd -m user
+
+if [ -n "$RSYNC_LOCATION" ]; then
+    echo "########### Initiating Rsync"
+    sudo -u user mkdir -p /home/user/.bitcoin
+    sudo -u user rsync -Carz "$RSYNC_LOCATION" /home/user/.bitcoin/ &
+fi
+
 echo "########### Updating Ubuntu"
 add-apt-repository -y ppa:bitcoin/bitcoin
 apt-get -y update
@@ -77,10 +87,6 @@ make
 make install
 
 cd ..
-
-echo "########### Create Bitcoin User"
-useradd -m user
-
 echo "########### Creating config"
 cd ~user
 sudo -u user mkdir -p .bitcoin
@@ -96,7 +102,7 @@ echo "rpcpassword=$randPass" >> $config
 
 echo "########### Setting up autostart (cron & systemd)"
 crontab -l > tempcron
-echo "0 3 * * * reboot" >> tempcron  # reboot at 3am to keep things working okay
+echo "1 3 * * * reboot" >> tempcron  # reboot at 3:01am (GMT) to keep things working okay
 crontab tempcron
 rm tempcron
 
@@ -125,4 +131,5 @@ echo "export PS1=\"\[\e[0;36m\]NodeUp.xk.io \[\e[0;33m\]\t \[\e[0;35m\]\w \[\e[0
 
 install-another-script "statsInstall.sh"
 
+wait  # wait for background jobs before restarting, important for rsync
 reboot

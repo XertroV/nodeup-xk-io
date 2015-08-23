@@ -92,7 +92,7 @@ def create_install_command(name, client, branch='', rsync_location=''):
 
 
 def gen_loc(dcid: int):
-    return 'rsync://source-%d.xk.io/bitcoin' % dcid
+    return 'rsync://source-%d.xk.io/bitcoin/' % dcid
 
 
 def configure_droplet(id, servers=None):
