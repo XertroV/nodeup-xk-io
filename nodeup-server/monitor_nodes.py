@@ -22,6 +22,10 @@ headers = create_headers(vultr_api_key.get())
 NODE_CREATION_LIMIT_MSG = b'Server add failed: You have reached the maximum number of active virtual machines for this account. For security reasons, please contact our support team to have the limit raised'
 
 
+def get_servers():
+    return requests.get('https://api.vultr.com/v1/server/list?api_key=%s' % vultr_api_key.get()).json()
+
+
 def ssh(hostname, username, password, cmd):
     client = SSHClient()
     client.set_missing_host_key_policy(AutoAddPolicy())
@@ -83,7 +87,7 @@ def process_next_creation():
 
 def configure_droplet(id, servers=None):
     if servers is None:
-        servers = requests.get('https://api.vultr.com/v1/server/list?api_key=%s' % vultr_api_key.get()).json()
+        servers = get_servers()
     account = Account(droplet_to_uid[id])
     logging.info('Configuring %s for %s' % (id, account.uid))
     droplet = servers[id]
@@ -163,7 +167,7 @@ def process_node_creations(stop_at):
 @asyncio.coroutine
 def configure_droplet_loop(stop_at):
     while time.time() < stop_at:
-        servers = requests.get('https://api.vultr.com/v1/server/list?api_key=%s' % vultr_api_key.get()).json()
+        servers = get_servers()
         for droplet_id, ts in droplets_to_configure:
             subid = droplet_id.decode()
             if subid in servers and servers[subid]['server_state'] == 'ok':
