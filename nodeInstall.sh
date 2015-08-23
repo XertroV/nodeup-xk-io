@@ -40,6 +40,8 @@ if [ "$NODE_NAME" == "Bitcoin XT" ]; then
     URL="https://github.com/bitcoinxt/bitcoinxt.git"
 elif [ "$NODE_NAME" == "Bitcoin Core" ]; then
     URL="https://github.com/bitcoin/bitcoin.git"
+elif [ "$NODE_NAME" == "Core w/ BIP101" ]; then
+    URL="https://bitbucket.org/bitcartel/bitcoinxt.git"
 fi
 
 git clone "$URL" bitcoin 2>&1

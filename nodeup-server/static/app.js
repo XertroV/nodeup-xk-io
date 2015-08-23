@@ -37,7 +37,7 @@
         agent.status = "Waiting for payment...";
         agent.statusSymbol = "spinner";
 
-        agent.clients = ['Bitcoin XT', 'Bitcoin Core'];
+        agent.clients = ['Bitcoin XT', 'Bitcoin Core', 'Core w/ BIP101'];
         agent.client = agent.clients[0];
 
         agent.months = 1;
