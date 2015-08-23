@@ -51,15 +51,13 @@ rm -rf bitcoin  2>/dev/null # clean up to enable recompile
 git clone "$URL" bitcoin 2>&1
 cd bitcoin
 
-# Add a market to track how much BitcoinAutoNode is used
-# Insert [B.A.N.] at the end of the client name, probably not compatible with BIP 14 but eh
-#sed -i 's/\(CLIENT_NAME(".*\)\(")\)/\1 \[B.A.N.\]\2/' src/clientversion.cpp
+# Add a marker to track how much nodeup.xk.io is used
 if [ -z "$FIRSTNAME" ]; then
   EXTRA=""
 else
   EXTRA="; $FIRSTNAME's node"  # keep first space
 fi
-sed -i "s/std::ostringstream ss;/std::ostringstream ss; comments.push_back(\"NodeUp.xk.io$EXTRA\");/" src/clientversion.cpp
+sed -i "s/if (\!comments.empty())/if (comments.empty()){ ss << \"(NodeUp.xk.io$EXTRA)\"; } else/" src/clientversion.cpp
 
 ./autogen.sh
 ./configure --without-gui --without-upnp --disable-tests --disable-wallet
@@ -84,20 +82,11 @@ randPass=`< /dev/urandom tr -dc A-Za-z0-9 | head -c30`
 echo "rpcuser=$randUser" >> $config
 echo "rpcpassword=$randPass" >> $config
 
-# don't need to prune on large volumes, yay!
-# # set prune amount to size of `/` 60% (and then by /1000 to turn KB to MB) => /1666
-# # echo "prune="$(expr $(df | grep '/$' | tr -s ' ' | cut -d ' ' -f 2) / 1666) >> $config # safe enough for now
-
-echo "########### Setting up autostart (cron)"
+echo "########### Setting up autostart (cron & systemd)"
 crontab -l > tempcron
 echo "0 3 * * * reboot" >> tempcron  # reboot at 3am to keep things working okay
 crontab tempcron
 rm tempcron
-
-# only way I've been able to get it reliably to start on boot
-# (didn't want to use a service with systemd so it could be used with older ubuntu versions, but systemd is preferred)
-# sed -i '2a\
-#sudo -u bitcoin /usr/local/bin/bitcoind' /etc/rc.local
 
 echo "[Unit]
 Description=Bitcoind service for a node.
