@@ -217,7 +217,7 @@ def restart_loop(stop_at):
                 print(res)
                 logging.info('Restarted server %s' % id)
             except Exception as e:
-                logging.error('Could not restart server %s' % id)
+                logging.error('Could not restart server %s because %s ' % (id, repr(e)))
                 servers_to_restart.append(id)
             yield from asyncio.sleep(1)
         yield from asyncio.sleep(1)
