@@ -148,8 +148,8 @@ def check_server_for_expiration(id):
     now = int(time.time())
     creation_ts = account.creation_ts.get()
     paid_minutes = account.total_minutes.get()
-    if (now - creation_ts) < (MIN_TIME * 60):  # created in within the last MIN_TIME
-        return
+    #if (now) < (creation_ts + MIN_TIME * 60):  # created in within the last MIN_TIME
+    #    return
     if now > (creation_ts + paid_minutes * 60):
         # then destroy
         logging.warning('Destroying node %s' % id)
