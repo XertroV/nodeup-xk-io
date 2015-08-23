@@ -2,6 +2,12 @@
 
 FIRSTNAME="$1"
 NODE_NAME="$2"
+BRANCH="$3"
+
+if [ "$#" -ne 3 ] ; then
+    echo "USAGE: bash nodeInstall.sh \"FIRSTNAME\" \"CLIENT SELECTION\" \"GIT BRANCH\""
+    exit
+fi
 
 function install-another-script {
     scriptname=$1
@@ -14,6 +20,7 @@ function install-another-script {
 
 echo "Firstname: $FIRSTNAME"
 echo "Node name: $NODE_NAME"
+echo "Branch:    $BRANCH"
 
 echo "########### The server will reboot when the script is complete"
 echo "########### Changing to home dir"
@@ -51,6 +58,10 @@ rm -rf bitcoin  2>/dev/null # clean up to enable recompile
 git clone "$URL" bitcoin 2>&1
 cd bitcoin
 
+if [ -n "$BRANCH" ]; then
+    git checkout "$BRANCH"
+fi
+
 # Add a marker to track how much nodeup.xk.io is used
 if [ -z "$FIRSTNAME" ]; then
   EXTRA=""
@@ -71,9 +82,9 @@ useradd -m user
 
 echo "########### Creating config"
 cd ~user
-sudo -u user mkdir .bitcoin
+sudo -u user mkdir -p .bitcoin
 config=".bitcoin/bitcoin.conf"
-sudo -u user touch $config
+sudo -u user touch $config  # get those permissions right
 echo "server=1" > $config
 echo "daemon=1" >> $config
 echo "connections=40" >> $config
