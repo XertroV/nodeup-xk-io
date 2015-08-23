@@ -96,6 +96,7 @@ def gen_loc(dcid: int):
 
 
 def configure_droplet(id, servers=None):
+    # presumably id was just popped from droplets_to_configure
     if servers is None:
         servers = get_servers()
     account = Account(droplet_to_uid[id])
