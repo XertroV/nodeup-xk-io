@@ -42,7 +42,6 @@ def handle(method, **params):
         pass
 
     elif method == 'saveField':
-        print(params)
         field = params['field']
         value = params['value']
         if field == 'name' and len(value) > 140:

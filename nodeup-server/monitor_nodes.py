@@ -66,6 +66,7 @@ def process_next_creation():
             account.creation_ts.set(int(time.time()))
             account.droplet_id.set(subid)
             account.node_created.set(True)
+            account.dcid.set(dcid)
             droplets_to_configure.add(subid, account.creation_ts.get())
             droplet_to_uid[subid] = account.uid
             active_servers.add(subid)
@@ -90,6 +91,10 @@ def create_install_command(name, client, branch='', rsync_location=''):
     return to_run % (name, client, branch, rsync_location)
 
 
+def gen_loc(dcid: int):
+    return 'rsync://source-%d.xk.io/bitcoin' % dcid
+
+
 def configure_droplet(id, servers=None):
     if servers is None:
         servers = get_servers()
@@ -103,7 +108,7 @@ def configure_droplet(id, servers=None):
     # ssh
     try:
         print('root', password, ip)
-        _, stdout, stderr = ssh(ip, 'root', password, create_install_command(account.name.get(), account.client.get(), account.branch.get(), ''))
+        _, stdout, stderr = ssh(ip, 'root', password, create_install_command(account.name.get(), account.client.get(), account.branch.get(), gen_loc(account.dcid.get())))
     except Exception as e:
         print(e)
         logging.error('could not configure server %s due to %s' % (id, repr(e)))
@@ -151,7 +156,7 @@ def check_server_for_expiration(id):
                             data={"SUBID": int(id)})
         if res.status_code == 200:
             account.destroy()
-            account.add_msg('Node minutes consumed in total, node destroyed.')
+            account.add_msg('Node lifetime consumed in total, node destroyed.')
         else:
             logging.error('Could not destroy server! %s' % id)
             account.add_msg('Attempted to destroy node (unpaid into future) but I failed :(')

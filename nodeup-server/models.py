@@ -111,6 +111,7 @@ class Account:
         self.node_created = SimpleKVPair(self.db, 'node_created:%s' % uid, bool, default=False)
         self.creation_ts = SimpleKVPair(self.db, 'creation_ts:%s' % uid, int)
         self.droplet_id = SimpleKVPair(db, 'droplet_id:%s' % uid, str)
+        self.dcid = SimpleKVPair(db, 'dcid:%s' % uid, int, default=1)
         self.unconf_minutes = SimpleKVPair(db, 'unconf_mins:%s' % uid, int, default=0)
         self.compile_ts = SimpleKVPair(db, 'compile_ts:%s' % uid, int, default=0)
         self.destroyed = SimpleKVPair(db, 'destroyed:%s' % uid, bool, default=False)
