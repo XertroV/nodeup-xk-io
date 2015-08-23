@@ -101,9 +101,10 @@ echo "rpcuser=$randUser" >> $config
 echo "rpcpassword=$randPass" >> $config
 
 echo "########### Setting up autostart (cron & systemd)"
-crontab -l > tempcron
+touch tempcron
+sudo -u user crontab tempcron  # wipe user crontab
 echo "1 3 * * * reboot" >> tempcron  # reboot at 3:01am (GMT) to keep things working okay
-crontab tempcron
+crontab tempcron  # wipe root crontab and replace with reboot
 rm tempcron
 
 echo "[Unit]
