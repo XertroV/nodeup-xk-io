@@ -37,9 +37,6 @@ args = parser.parse_args()
 if args.ssh_management_key != '':
     ssh_management_key.set(args.ssh_management_key)
 
-if args.ssh_auditor_key != '':
-    ssh_auditor_key.set(args.ssh_auditor_key)
-
 if args.vultr_api_key != '':
     vultr_api_key.set(args.vultr_api_key)
 
