@@ -178,11 +178,11 @@ class Account:
     Expiry        : {expiry}
     Email         : {email}
 
-    take 3 account.msgs
+    take 5 account.msgs
         {msgs}
 
 """.format(uid=self.uid, address=self.address, n_txs=len(self.txs), total_coins=self.total_coins.get(),
-           total_minutes=self.total_minutes.get(), server_id=self.droplet_id.get(), msgs=self.get_msgs(3),
+           total_minutes=self.total_minutes.get(), server_id=self.droplet_id.get(), msgs=self.get_msgs(5),
            expiry=self.get_expiry().isoformat(), server_ip=droplet_ips[self.droplet_id.get()],
            name=self.name.get(), email=self.email.get())
 
