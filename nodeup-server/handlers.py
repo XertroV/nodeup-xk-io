@@ -70,7 +70,7 @@ def handle(method, **params):
 
     elif method == 'recompile':
         if account.node_created.get():
-            droplets_to_configure.add(account.droplet_id.get())
+            droplets_to_configure.add(account.droplet_id.get(), 0)
             account.get_msgs('Queued node for recompilation.')
             response['recompile_queued'] = True
         else:
