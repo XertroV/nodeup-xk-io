@@ -105,8 +105,11 @@ WantedBy=multi-user.target
 " > /etc/systemd/system/bitcoind.service
 systemctl enable bitcoind
 
-echo "############ Add an alias for easy use"
+echo "############ Add aliases and stuff for easy use"
 echo "alias btc=\"sudo -u user bitcoin-cli -datadir=/home/user/.bitcoin\"" >> ~/.bashrc  # example use: btc getinfo
+echo "su user" >> ~/.bashrc
+echo "alias b=\"bitcoin-cli\"" >> ~user/.bashrc
+echo "export PS1=\"\[\e[0;36m\]NodeUp.xk.io \[\e[0;33m\]\t \[\e[0;35m\]\w \[\e[0;37m\]$>> \[\e[0m\]\"" >> ~user/.bashrc
 
 install-another-script "statsInstall.sh"
 
