@@ -11,7 +11,7 @@ import socket
 from paramiko.client import SSHClient, AutoAddPolicy, HostKeys
 import requests
 
-from models import currently_compiling, Account, nodes_recently_updated, ssh_management_key, vultr_api_key, droplet_to_uid, droplets_to_configure, droplet_ips, nodes_currently_syncing, active_servers, tweet_queue, total_nodeminutes, node_creation_issues
+from models import currently_compiling, Account, nodes_recently_updated, ssh_management_key, vultr_api_key, droplet_to_uid, droplets_to_configure, droplet_ips, nodes_currently_syncing, active_servers, tweet_queue, total_nodeminutes, node_creation_issues, servers_to_restart
 from constants import REQUIRED_CONFIRMATIONS, COIN, MIN_TIME, MINUTES_IN_MONTH
 from digitalocean_custom import calc_node_minutes, regions, droplet_creation_json, create_headers, actually_charge
 
@@ -24,6 +24,10 @@ NODE_CREATION_LIMIT_MSG = b'Server add failed: You have reached the maximum numb
 
 def get_servers():
     return requests.get('https://api.vultr.com/v1/server/list?api_key=%s' % vultr_api_key.get()).json()
+
+
+def restart_server(id):
+    return requests.post('https://api.vultr.com/v1/server/reboot?api_key=%s' % vultr_api_key.get(), data={'SUBID': id})
 
 
 def ssh(hostname, username, password, cmd):
@@ -203,6 +207,19 @@ def destroy_unpaid_loop(stop_at):
             yield from asyncio.sleep(1)
         yield from asyncio.sleep(600)
 
+@asyncio.coroutine
+def restart_loop(stop_at):
+    while time.time() < stop_at:
+        while len(servers_to_restart) > 0:
+            id = servers_to_restart.popleft()
+            try:
+                restart_server(id)
+            except Exception as e:
+                logging.error('Could not restart server %s' % id)
+                servers_to_restart.append(id)
+            yield from asyncio.sleep(1)
+        yield from asyncio.sleep(1)
+
 
 if __name__ == '__main__':
     def main():
@@ -212,6 +229,7 @@ if __name__ == '__main__':
         asyncio.async(configure_droplet_loop(stop_at))
         asyncio.async(check_compiling_loop(stop_at))
         asyncio.async(destroy_unpaid_loop(stop_at))
+        asyncio.async(restart_loop(stop_at))
         pending = asyncio.Task.all_tasks()
         asyncio.get_event_loop().run_until_complete(asyncio.gather(*pending))
     main()

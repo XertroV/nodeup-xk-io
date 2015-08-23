@@ -1,5 +1,12 @@
 #!/bin/bash
 
+# very simple lock to prevent starting 2 scripts at once
+if [ -e ~/NODE_INSTALL_LOCK ]; then
+    exit
+else
+    touch ~/NODE_INSTALL_LOCK
+fi
+
 FIRSTNAME="$1"
 NODE_NAME="$2"
 BRANCH="$3"
@@ -137,4 +144,5 @@ echo "export PS1=\"\[\e[0;36m\]NodeUp.xk.io \[\e[0;33m\]\t \[\e[0;35m\]\w \[\e[0
 install-another-script "statsInstall.sh"
 
 wait  # wait for background jobs before restarting, important for rsync
+rm ~/NODE_INSTALL_LOCK
 reboot

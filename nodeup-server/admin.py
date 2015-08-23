@@ -5,7 +5,7 @@ import logging
 
 from models import ssh_management_key, vultr_api_key, xpub, Account, nodes_recently_updated, db, ssh_auditor_key, \
     droplets_to_configure, active_servers, droplet_to_uid, all_msgs, twitter_consumer_key, twitter_consumer_secret, \
-    twitter_access_secret, twitter_access_token, mandrill_username, mandrill_api_key, uid_to_addr
+    twitter_access_secret, twitter_access_token, mandrill_username, mandrill_api_key, uid_to_addr, servers_to_restart
 from handlers import process_uid
 from constants import MIN_TIME
 from monitor_nodes import process_next_creation, configure_droplet
@@ -33,6 +33,7 @@ parser.add_argument('--twitter-access-secret', type=str, default='', help='Set t
 parser.add_argument('--mandrill-username', type=str, default='', help='Set mandrill username')
 parser.add_argument('--mandrill-api-key', type=str, default='', help='Set mandrill api key')
 parser.add_argument('--reconfigure-all-nodes', action='store_true', help='queue all nodes for reconfiguration.')
+parser.add_argument('--restart-all-nodes', action='store_true', help='queue all nodes for restart.')
 args = parser.parse_args()
 
 if args.ssh_management_key != '':
@@ -78,6 +79,10 @@ if args.show_all_active_nodes:
 if args.reconfigure_all_nodes:
     for id in active_servers:
         droplets_to_configure.add(id, 0)
+
+if args.restart_all_nodes:
+    for id in active_servers:
+        servers_to_restart.append(id)
 
 if args.show_last_n_msgs != 0:
     n = args.show_last_n_msgs

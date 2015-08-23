@@ -88,6 +88,7 @@ droplet_ips = Hash(db, 'droplet_ips')
 currently_compiling = Set(db, 'currently_compiling')
 nodes_currently_syncing = Set(db, 'currently_syncing')
 active_servers = Set(db, 'active_servers')
+servers_to_restart = List(db, 'servers_to_restart')
 
 
 class Account:
