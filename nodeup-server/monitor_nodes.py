@@ -213,7 +213,9 @@ def restart_loop(stop_at):
         while len(servers_to_restart) > 0:
             id = servers_to_restart.popleft()
             try:
-                restart_server(id)
+                res = restart_server(id)
+                print(res)
+                logging.info('Restarted server %s' % id)
             except Exception as e:
                 logging.error('Could not restart server %s' % id)
                 servers_to_restart.append(id)
