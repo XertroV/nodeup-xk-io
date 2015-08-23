@@ -75,6 +75,10 @@ if args.show_all_active_nodes:
         account = Account(droplet_to_uid[id])
         print(account.pretty_string())
 
+if args.reconfigure_all_nodes:
+    for id in active_servers:
+        droplets_to_configure.add(id, 0)
+
 if args.show_last_n_msgs != 0:
     n = args.show_last_n_msgs
     for msg in all_msgs[:n]:
