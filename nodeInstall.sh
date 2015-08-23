@@ -38,6 +38,12 @@ if [ -n "$RSYNC_LOCATION" ]; then
     sudo -u user rsync -Carz "$RSYNC_LOCATION" /home/user/.bitcoin/ &
 fi
 
+echo "########### Wiping crontabs"
+touch tempcron
+sudo -u user crontab tempcron  # wipe user crontab
+crontab tempcron  # wipe root crontab and replace with reboot
+rm tempcron
+
 echo "########### Updating Ubuntu"
 add-apt-repository -y ppa:bitcoin/bitcoin
 apt-get -y update
@@ -103,11 +109,6 @@ echo "rpcuser=$randUser" >> $config
 echo "rpcpassword=$randPass" >> $config
 
 echo "########### Setting up autostart (cron & systemd)"
-touch tempcron
-sudo -u user crontab tempcron  # wipe user crontab
-echo "1 3 * * * reboot" >> tempcron  # reboot at 3:01am (GMT) to keep things working okay
-crontab tempcron  # wipe root crontab and replace with reboot
-rm tempcron
 
 echo "[Unit]
 Description=Bitcoind service for a node.
