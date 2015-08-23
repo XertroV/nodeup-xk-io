@@ -32,6 +32,7 @@ parser.add_argument('--twitter-access-token', type=str, default='', help='Set tw
 parser.add_argument('--twitter-access-secret', type=str, default='', help='Set twitter access secret')
 parser.add_argument('--mandrill-username', type=str, default='', help='Set mandrill username')
 parser.add_argument('--mandrill-api-key', type=str, default='', help='Set mandrill api key')
+parser.add_argument('--reconfigure-all-nodes', action='store_true', help='queue all nodes for reconfiguration.')
 args = parser.parse_args()
 
 if args.ssh_management_key != '':

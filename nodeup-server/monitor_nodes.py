@@ -161,6 +161,8 @@ def check_server_for_expiration(id):
         else:
             logging.error('Could not destroy server! %s' % id)
             account.add_msg('Attempted to destroy node (unpaid into future) but I failed :(')
+        if account.destroyed.get():
+            active_servers.remove(id)
 
 
 @asyncio.coroutine
