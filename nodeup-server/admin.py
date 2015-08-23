@@ -62,7 +62,7 @@ if args.create_startup_script != '':
     raise Exception('Unimplemented')
 
 if args.show_account != '':
-    uids = [args.show_account, process_uid(args.show_account)]
+    uids = [args.show_account.encode(), process_uid(args.show_account)]
     for uid in uids:
         if uid in uid_to_addr:
             account = Account(uid)
