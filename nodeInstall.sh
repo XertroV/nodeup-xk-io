@@ -53,9 +53,9 @@ cd bitcoin
 if [ -z $FIRSTNAME ]; then
   EXTRA=""
 else
-  EXTRA=" $FIRSTNAME's node;"  # keep first space
+  EXTRA="; $FIRSTNAME's node"  # keep first space
 fi
-sed -i "s/std::ostringstream ss;/std::ostringstream ss; comments.push_back(\"NodeUp.xk.io;$EXTRA\");/" src/clientversion.cpp
+sed -i "s/std::ostringstream ss;/std::ostringstream ss; comments.push_back(\"NodeUp.xk.io$EXTRA\");/" src/clientversion.cpp
 
 ./autogen.sh
 ./configure --without-gui --without-upnp --disable-tests --disable-wallet
