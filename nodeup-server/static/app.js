@@ -38,7 +38,7 @@
         agent.statusSymbol = "spinner";
 
         agent.clients =  ['Bitcoin XT',     'Bitcoin Core',     'Core w/ BIP101'];
-        agent.branches = {'Bitcoin XT': '', 'Bitcoin Core': '', 'Core w/ BIP101': 'only-bigblocks'};
+        agent.branches = {'Bitcoin XT': '', 'Bitcoin Core': '', 'Core w/ BIP101': 'tags/v0.11.0-BIP101'};
         agent.client = agent.clients[0];
         agent.branch = '';
 
