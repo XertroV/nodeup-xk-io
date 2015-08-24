@@ -119,7 +119,7 @@ def configure_droplet(id, servers=None):
         logging.error('could not configure server %s due to %s' % (id, repr(e)))
         return
     print(stdout.read(), stderr.read())
-    account.add_msg('Started compilation script on server %s -- takes about 30 minutes' % id)
+    account.add_msg('Started compilation script on server %s -- can take hours as it also bootstraps the blockchain.' % id)
     logging.info('Configuring server %s' % id)
     account.compile_ts.set(int(time.time()))
     droplets_to_configure.remove(id)
