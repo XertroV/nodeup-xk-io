@@ -88,7 +88,7 @@
             {{ agent.error }}
         </div>
 
-        <h2>{{ agent.nodeMinutes / (30 * 24 * 60) | number:2 }} node-months paid for site-wide and {{ agent.activeNodes }} active nodes.</h2>
+        <h2>{{ agent.nodeMinutes / (30 * 24 * 60) | number:2 }} node-months paid for site-wide and <a href="https://getaddr.bitnodes.io/nodes/?q=nodeup">{{ agent.activeNodes }} active nodes</a>.</h2>
 
         <div id="twitter-timeline-container" class="mx-auto">
             <a class="twitter-timeline" href="https://twitter.com/nodeup_alerts" data-widget-id="634907069296934912">Tweets by @nodeup_alerts</a>
