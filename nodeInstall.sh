@@ -45,7 +45,7 @@ useradd -m user
 if [ -n "$RSYNC_LOCATION" ]; then
     echo "########### Initiating Rsync"
     sudo -u user mkdir -p /home/user/.bitcoin
-    sudo -u user rsync -Carz --delete "$RSYNC_LOCATION/blocks/" /home/user/.bitcoin/blocks/ &
+    sudo -u user rsync -Carz --delete "$RSYNC_LOCATION/blocks/" /home/user/.bitcoin/blocks/ &&
     sudo -u user rsync -Carz --delete "$RSYNC_LOCATION/chainstate/" /home/user/.bitcoin/chainstate/ &
 fi
 
