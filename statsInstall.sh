@@ -2,8 +2,12 @@
 
 function addtousercron {
     crontab -u user -l > tmp-crontab
-    echo "$1" >> tmp-crontab
-    crontab -u user tmp-crontab
+    if grep -Fxq "$1" tmp-crontab; then
+        echo "not adding '$1' to cron"
+    else
+        echo "$1" >> tmp-crontab
+        crontab -u user tmp-crontab
+    fi
     rm tmp-crontab
 }
 
