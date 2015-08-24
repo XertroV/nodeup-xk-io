@@ -27,7 +27,7 @@ newp
 echo "=========" >> $filename
 date >> $filename
 newp
-bitcoin-cli getinfo >> $filename
+/usr/local/bin/bitcoin-cli getinfo >> $filename
 newp
 tail -n 3 ~/.bitcoin/debug.log >> $filename
 newp
