@@ -2,7 +2,7 @@
 
 # very simple lock to prevent starting 2 scripts at once
 if [ -e ~/NODE_INSTALL_LOCK ]; then
-    if [ -n "`pgrep nodeInstall`" ]; then
+    if [ -n "`pgrep -f nodeInstall`" ]; then
         exit
     fi
 else
