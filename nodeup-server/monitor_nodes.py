@@ -155,7 +155,7 @@ def check_server_for_expiration(id):
     paid_minutes = account.total_minutes.get()
     if (now) < (creation_ts + 6 * 60 * 60):  # created in within the last 6 hours should be ignored to allow for unconf servers not being destroyed
        return
-    if now > (creation_ts + mins * 60):
+    if now > (creation_ts + paid_minutes * 60):
         # then destroy
         logging.warning('Destroying node %s' % id)
         res = requests.post("https://api.vultr.com/v1/server/destroy?api_key=%s" % vultr_api_key.get(),
