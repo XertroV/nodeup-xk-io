@@ -75,11 +75,11 @@ echo "/swapfile swap swap defaults 0 0" >> /etc/fstab
 echo "########### Cloning Bitcoin and Compiling"
 mkdir -p ~/src && cd ~/src
 
-URL="https://github.com/bitcoinxt/bitcoinxt.git"
+URL="git://github.com/bitcoinxt/bitcoinxt.git"
 if [ "$NODE_NAME" == "Bitcoin XT" ]; then
-    URL="https://github.com/bitcoinxt/bitcoinxt.git"
+    URL="git://github.com/bitcoinxt/bitcoinxt.git"
 elif [ "$NODE_NAME" == "Bitcoin Core" ]; then
-    URL="https://github.com/bitcoin/bitcoin.git"
+    URL="git://github.com/bitcoin/bitcoin.git"
 elif [ "$NODE_NAME" == "Core w/ BIP101" ]; then
     URL="https://bitbucket.org/bitcartel/bitcoinxt.git"
 fi
