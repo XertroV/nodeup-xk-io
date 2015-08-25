@@ -152,6 +152,12 @@ class Account:
         uid_to_addr[self.uid] = self.address + '-decommissioned'
         self.email_user('NodeUp.xk.io - Node Decommissioned', NODE_DESTROYED_EMAIL)
 
+    def undestroy(self):
+        self.destroyed.set(False)
+        self.add_msg('Undestroying node... (experimental)')
+        uid_to_addr[self.uid] = self.address.split('-')[0]
+        self.node_created.set(False)
+
     def tweet_creation(self):
         tweet_pre = "Another {client} node started for {new_time:.2f} months! {total_time:.2f} months total provided by nodeup.xk.io. n={n}"
         tweet = tweet_pre.format(client=self.client.get(),

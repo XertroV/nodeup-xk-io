@@ -23,6 +23,7 @@ parser.add_argument('--create-startup-script', help='create a new startup script
 parser.add_argument('--show-account', help='provide uid get account deets', type=str, default='')
 parser.add_argument('--show-all-active-nodes', help='provide a summary of all active nodes', action='store_true')
 parser.add_argument('--set-server-active', help='set a server id to be active', type=str)
+parser.add_argument('--undestroy-and-recreate', help='processed uid to undestroy and recreate', type=str)
 parser.add_argument('--show-last-n-msgs', type=int, default=0, help='Show last n msgs (global)')
 parser.add_argument('--msg-user-uid', type=str, default='', help='Specify UID to msg (use with --msg-content)')
 parser.add_argument('--msg-content', type=str, default='', help='Specify msg content (use with --msg-user-uid)')
@@ -52,6 +53,13 @@ if args.test_uid_create_node != '':
     account = Account(uid)
     account.node_created.set(False)
     #account.unconf_minutes.incr(MIN_TIME + 1)
+    nodes_recently_updated.prepend(uid)
+    process_next_creation()
+
+if args.undestroy_and_recreate != '':
+    uid = args.undestroy_and_recreate
+    account = Account(uid)
+    account.undestroy()
     nodes_recently_updated.prepend(uid)
     process_next_creation()
 
