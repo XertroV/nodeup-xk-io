@@ -5,7 +5,8 @@ import logging
 
 from models import ssh_management_key, vultr_api_key, xpub, Account, nodes_recently_updated, db, ssh_auditor_key, \
     droplets_to_configure, active_servers, droplet_to_uid, all_msgs, twitter_consumer_key, twitter_consumer_secret, \
-    twitter_access_secret, twitter_access_token, mandrill_username, mandrill_api_key, uid_to_addr, servers_to_restart
+    twitter_access_secret, twitter_access_token, mandrill_username, mandrill_api_key, uid_to_addr, servers_to_restart, \
+    unprocessed_txs
 from handlers import process_uid
 from constants import MIN_TIME
 from monitor_nodes import process_next_creation, configure_droplet
@@ -36,6 +37,7 @@ parser.add_argument('--mandrill-username', type=str, default='', help='Set mandr
 parser.add_argument('--mandrill-api-key', type=str, default='', help='Set mandrill api key')
 parser.add_argument('--reconfigure-all-nodes', action='store_true', help='queue all nodes for reconfiguration.')
 parser.add_argument('--restart-all-nodes', action='store_true', help='queue all nodes for restart.')
+parser.add_argument('--recount-paid-by', type=str, help='provide uid to recount paid txs', default='')
 args = parser.parse_args()
 
 if args.ssh_management_key != '':
@@ -132,3 +134,9 @@ if args.mandrill_username != '':
 
 if args.mandrill_api_key != '':
     mandrill_api_key.set(args.mandrill_api_key)
+
+if args.recount_paid_by != '':
+    uid = args.recount_paid_by
+    account = Account(uid)
+    for txid in account.txs:
+        unprocessed_txs.add(txid)
