@@ -10,7 +10,7 @@ from walrus.database import Hash, List, Set, ZSet, Database
 
 from bitcoinrpc import connect_to_local
 
-from constants import MINUTES_IN_MONTH, NODE_UP_EMAIL
+from constants import MINUTES_IN_MONTH, NODE_UP_EMAIL, NODE_DESTROYED_EMAIL
 
 db = Database()
 
@@ -150,6 +150,7 @@ class Account:
         self.destroyed.set(True)
         self.add_msg('Node destroyed. Please use a new account.')
         uid_to_addr[self.uid] = self.address + '-decommissioned'
+        self.email_user('NodeUp.xk.io - Node Decommissioned', NODE_DESTROYED_EMAIL)
 
     def tweet_creation(self):
         tweet_pre = "Another {client} node started for {new_time:.2f} months! {total_time:.2f} months total provided by nodeup.xk.io. n={n}"

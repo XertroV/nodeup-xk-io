@@ -22,3 +22,9 @@ NODE_DETAILS_EMAIL = """Hi,
 
 The management URL for your node is: http://nodeup.xk.io/{uid}
 """ + EMAIL_FOOTER
+
+NODE_DESTROYED_EMAIL = """Hi,
+
+Your node at NodeUp.xk.io has been decommissioned as it's account has run dry.
+If you would like to sponsor a new node please use a new account.
+""" + EMAIL_FOOTER
