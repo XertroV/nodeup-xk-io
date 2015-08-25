@@ -27,9 +27,9 @@
 
 <div class="content center" ng-controller="UserAgentController as agent">
     <div  ng-show="tabs.is('main')">
-        <h3 class="red">WARNING: Alpha quality software.</h3>
-        <h4 class="red">This is currently under active development and unexpected things may occur.</h4>
-        <h4 class="blue" ng-show="agent.nodeCreationIssues">Currently there is an issue provisioning new nodes due to account limitations. I'm working on getting this resolved. New nodes will be queued and automatically created when this is resolved.</h4>
+        <h3 class="blue">Beta Software.</h3>
+        <h4 class="blue">This is currently under active testing and unexpected things may occur.</h4>
+        <h4 class="red" ng-show="agent.nodeCreationIssues">Currently there is an issue provisioning new nodes due to account limitations. I'm working on getting this resolved. New nodes will be queued and automatically created when this is resolved.</h4>
 
         <h2 class="h2">{{ agent.renderGreeting() }}, let's create a full node in 10 seconds.</h2>
 
