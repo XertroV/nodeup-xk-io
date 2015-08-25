@@ -2,8 +2,7 @@
 
 # very simple lock to prevent starting 2 scripts at once
 if [ -e ~/NODE_INSTALL_LOCK ]; then
-    MAYBE_INSTALLERS=`ps ax | grep nodeInstall | grep Install.sh`
-    if [ -n "$MAYBE_INSTALLERS" ]; then
+    if [ -n "`pgrep nodeInstall`" ]; then
         exit
     fi
 else
