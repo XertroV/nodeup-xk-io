@@ -88,6 +88,7 @@ def process_next_creation():
             # import pdb; pdb.set_trace()
     else:
         logging.warning('Account already has a node created.')
+        print(account.node_created.get())
 
 
 def create_install_command(name, client, branch='', rsync_location=''):

@@ -49,7 +49,7 @@ if args.xpub != '':
 
 if args.test_uid_create_node != '':
     #uid = process_uid(args.test_uid_create_node)
-    uid = args.test_uid_create_node  # do not process as this is probably only going to be an admin-for-user type action.
+    uid = args.test_uid_create_node.encode()  # do not process as this is probably only going to be an admin-for-user type action.
     account = Account(uid)
     account.node_created.set(False)
     #account.unconf_minutes.incr(MIN_TIME + 1)
@@ -57,7 +57,7 @@ if args.test_uid_create_node != '':
     process_next_creation()
 
 if args.undestroy_and_recreate != '':
-    uid = args.undestroy_and_recreate
+    uid = args.undestroy_and_recreate.encode()
     account = Account(uid)
     account.undestroy()
     nodes_recently_updated.prepend(uid)
