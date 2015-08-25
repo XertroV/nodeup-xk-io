@@ -41,6 +41,7 @@ def check_unprocessed():
                 account.add_msg('Increased node life by %d minutes; expiring around %s' % (node_minutes_d, account.get_expiry().isoformat()))
 
 if __name__ == '__main__':
+    check_unprocessed()
     while True:
         latest_block = get_latest_block()
         best_block_hash = latest_block.hash
