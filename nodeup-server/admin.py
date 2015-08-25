@@ -46,7 +46,8 @@ if args.xpub != '':
     xpub.set(args.xpub)
 
 if args.test_uid_create_node != '':
-    uid = process_uid(args.test_uid_create_node)
+    #uid = process_uid(args.test_uid_create_node)
+    uid = args.test_uid_create_node  # do not process as this is probably only going to be an admin-for-user type action.
     account = Account(uid)
     account.node_created.set(False)
     account.unconf_minutes.incr(MIN_TIME + 1)
