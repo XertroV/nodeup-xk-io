@@ -135,8 +135,8 @@ def check_compiling_node(id):
         s.connect((ip, 8333))  # VEEERRRRY simple
     except:
         # can't connect, check we're not way out in terms of time
-        if int(time.time()) - account.compile_ts.get() > 60 * 180:  # 60 min
-            account.add_msg('Possible compile issue (taking >180 minutes). Restarting.')
+        if int(time.time()) - account.compile_ts.get() > 60 * 60:  # 60 min
+            account.add_msg('Possible compile issue (taking >60 minutes). This is only an issue if it happens a lot.')
             droplets_to_configure.add(id, 0)
             currently_compiling.remove(id)
         return
