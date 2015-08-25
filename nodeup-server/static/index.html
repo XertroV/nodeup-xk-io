@@ -130,7 +130,7 @@
 
                 <p>
                     <div class="clearfix">
-                        <div class="col col-6">
+                        <div class="sm-col sm-col-12 lg-col-6">
                             <label for="emailInput">Email (optional):</label>
                             <input id="emailInput" type="text" class="field inline-block" placeholder="email@example.com" ng-model="agent.email" ng-change="agent.alertModified('email')">
                             <br>
@@ -139,7 +139,7 @@
                             <br>
                             <button class="btn btn-outline" ng-click="agent.sendNodeDetails()">Send Node Details in an Email</button>
                         </div>
-                        <div class="col col-6">If you choose to leave your email here, you will receive an email at important times, such as your when your node comes online, finishes synchronising with the blockchain, or running out of funds.</div>
+                        <div class="sm-col lg-col-6 sm-col-12">If you choose to leave your email here, you will receive an email at important times, such as your when your node comes online, finishes synchronising with the blockchain, or running out of funds.</div>
                     </div>
 
                 </p>
@@ -154,7 +154,6 @@
                 <hr>
 
                 <p>
-                    Testing (not guaranteed to work): <br>
                     Recompile Node: <button ng-click="agent.recompile()" ng-disabled="agent.isCompiling" class="btn btn-outline">Recompile</button>
                 </p>
 
