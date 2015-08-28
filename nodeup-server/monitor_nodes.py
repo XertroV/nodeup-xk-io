@@ -135,8 +135,9 @@ def check_compiling_node(id):
         s.connect((ip, 8333))  # VEEERRRRY simple
     except:
         # can't connect, check we're not way out in terms of time
-        if int(time.time()) - account.compile_ts.get() > 60 * 60:  # 60 min
-            account.add_msg('Possible compile issue (taking >60 minutes). This is only an issue if it happens a lot.')
+        check_every_n_minutes = 90
+        if int(time.time()) - account.compile_ts.get() > 60 * check_every_n_minutes:  # check_every_n_minutes min
+            account.add_msg('Possible compile issue (taking >%d minutes). This is only an issue if it happens a lot.' % check_every_n_minutes)
             droplets_to_configure.add(id, 0)
             currently_compiling.remove(id)
         return
@@ -175,7 +176,7 @@ def process_node_creations(stop_at):
     while time.time() < stop_at:
         response = process_next_creation()
         if response == 'CREATION_FAILED':
-            yield from asyncio.sleep(300)
+            yield from asyncio.sleep(300)  # wait 5 minutes
         yield from asyncio.sleep(1)
 
 
@@ -188,7 +189,7 @@ def configure_droplet_loop(stop_at):
             if subid in servers and servers[subid]['server_state'] == 'ok':
                 configure_droplet(subid, servers)
             yield from asyncio.sleep(1)  # give other things a chance every once and a while
-        yield from asyncio.sleep(60)
+        yield from asyncio.sleep(20)
 
 
 @asyncio.coroutine
@@ -197,7 +198,7 @@ def check_compiling_loop(stop_at):
         for id in currently_compiling.members():
             check_compiling_node(id)
             yield from asyncio.sleep(1)
-        yield from asyncio.sleep(60)
+        yield from asyncio.sleep(20)
 
 
 @asyncio.coroutine
@@ -206,7 +207,7 @@ def destroy_unpaid_loop(stop_at):
         for id in active_servers.members():
             check_server_for_expiration(id)
             yield from asyncio.sleep(1)
-        yield from asyncio.sleep(600)
+        yield from asyncio.sleep(20)
 
 @asyncio.coroutine
 def restart_loop(stop_at):
