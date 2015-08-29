@@ -57,10 +57,10 @@
                 </form>
         </div>
 
-        <p class="p1 m0">
-            <a href="https://twitter.com/share" class="twitter-share-button" data-url="http://nodeup.xk.io" data-text="Sponsor a full node in 10s at NodeUp" data-via="nodeup_alerts" data-hashtags="bitcoin">Tweet</a>
-            <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
-        </p>
+        <!--<p class="p1 m0">-->
+            <!--<a href="https://twitter.com/share" class="twitter-share-button" data-url="http://nodeup.xk.io" data-text="Sponsor a full node in 10s at NodeUp" data-via="nodeup_alerts" data-hashtags="bitcoin">Tweet</a>-->
+            <!--<script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>-->
+        <!--</p>-->
 
         <div id="paymentWrapper" class="center inline-block">
             <a href="{{ agent._paymentURI }}"><div class="paymentImg" id="paymentQR" ng-show="agent._paymentVisible"></div></a>
@@ -165,6 +165,20 @@
                         If you'd like to support the running of this service, you can use this <a href="http://www.vultr.com/?ref=6844985">vultr referral link</a>.
                         Vultr is a snazzy VPS provider (and they accept Bitcoin!).</li>
                 </ul>
+
+                <hr>
+
+                <h4>Creation schedule: (approximate)</h4>
+                <ul class="left-align">
+                    <li><strong>t+1 second</strong>   : Payment received. Server provisioning initiated.</li>
+                    <li><strong>t+10 minutes</strong> : Server provisioned w/ 125 GB of storage. Compilation and blockchain download initiated.</li>
+                    <li><strong>t+45 minutes</strong> : Compile completes.</li>
+                    <li><strong>t+120 minutes</strong>: Blockchain bootstrapping completes. (This takes longer when many nodes have recently been created). Node is rebooted.</li>
+                    <li><strong>t+121 minutes</strong>: Node begins accepting connections, and downloads the last few hundred blocks. At this point getaddr.bitnodes.io will often time out and report the node as down.</li>
+                    <li><strong>t+6-12 hours</strong> : Node finishes synchronising with the network and is a complete full node.</li>
+                    <li><strong>t+1 month</strong>    : Node is destroyed (if you only paid for 1 month).</li>
+                </ul>
+
             </form>
         </div>
     </div>
