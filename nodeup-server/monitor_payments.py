@@ -14,7 +14,7 @@ from wallet import hash_to_hex
 
 logging.basicConfig(level=logging.INFO)
 
-def check_unprocessed():
+def check_unprocessed(top_height):
     for tx_hash in unprocessed_txs.members():
         txid = hash_to_hex(tx_hash).decode()
         tx = Tx.tx_from_hex(txs[tx_hash].decode())
@@ -41,7 +41,6 @@ def check_unprocessed():
                 account.add_msg('Increased node life by %d minutes; expiring around %s' % (node_minutes_d, account.get_expiry().isoformat()))
 
 if __name__ == '__main__':
-    check_unprocessed()
     while True:
         latest_block = get_latest_block()
         best_block_hash = latest_block.hash
@@ -51,7 +50,7 @@ if __name__ == '__main__':
             continue
         logging.info('Latest block: %s' % best_block_hash)
 
-        check_unprocessed()
+        check_unprocessed(top_height)
 
         last_block_checked.set(best_block_hash)
         logging.info('Checked: %s' % best_block_hash)
