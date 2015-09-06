@@ -125,8 +125,6 @@ class Account:
         addr_to_uid[new_address] = self.uid
         uid_to_addr[self.uid] = new_address
         all_addresses.add(new_address)
-        self.total_coins.set(0)
-        self.total_minutes.set(0)
         return True
 
     def get_adjusted_unconf_minutes(self):
@@ -180,7 +178,8 @@ class Account:
     Address       : {address}
     # txs         : {n_txs}
     Total Coins   : {total_coins}
-    Total Months  : {total_minutes}
+    Unconf Mins   : {unconf_mins}
+    Total Mins    : {total_minutes}
     Server ID     : {server_id}
     Server IP     : {server_ip}
     Expiry        : {expiry}
@@ -192,7 +191,7 @@ class Account:
 """.format(uid=self.uid, address=self.address, n_txs=len(self.txs), total_coins=self.total_coins.get(),
            total_minutes=self.total_minutes.get(), server_id=self.droplet_id.get(), msgs=self.get_msgs(5),
            expiry=self.get_expiry().isoformat(), server_ip=droplet_ips[self.droplet_id.get()],
-           name=self.name.get(), email=self.email.get())
+           name=self.name.get(), email=self.email.get(), unconf_mins=self.unconf_minutes.get())
 
 
 def add_email(to, subject, body):
