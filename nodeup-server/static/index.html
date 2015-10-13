@@ -37,6 +37,7 @@
         <!--<h3 class="blue">Beta Software.</h3>-->
         <!--<h4 class="blue">This is currently under active testing and unexpected things may occur.</h4>-->
         <h4 class="red" ng-show="agent.nodeCreationIssues">Currently there is an issue provisioning new nodes due to account limitations. I'm working on getting this resolved. New nodes will be queued and automatically created when this is resolved.</h4>
+        <h2 class="h2 red">nodeup.xk.io is now decommissioned. Existing nodes will be supported (email nodeup@xk.io for support).</h2>
 
         <h2 class="h2">{{ agent.renderGreeting() }}, let's create a full node in 10 seconds.</h2>
 
@@ -62,11 +63,13 @@
             <!--<script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>-->
         <!--</p>-->
 
-        <div id="paymentWrapper" class="center inline-block">
-            <a href="{{ agent._paymentURI }}"><div class="paymentImg" id="paymentQR" ng-show="agent._paymentVisible"></div></a>
-            <div class="paymentImg" id="paymentSpinner" ng-show="!agent._paymentVisible"></div>
-            {{ agent.status }}
-        </div>
+        <!--<div id="paymentWrapper" class="center inline-block">-->
+            <!--<a href="{{ agent._paymentURI }}"><div class="paymentImg" id="paymentQR" ng-show="agent._paymentVisible"></div></a>-->
+            <!--<div class="paymentImg" id="paymentSpinner" ng-show="!agent._paymentVisible"></div>-->
+            <!--{{ agent.status }}-->
+        <!--</div>-->
+
+
 
         <h3 ng-show="!agent.activeUser()">Pay to create your node!</h3>
         <div ng-show="agent.activeUser()">
